@@ -3,6 +3,16 @@ layout: default
 nav_exclude: true
 ---
 
+# Project Description
+
+The goal of this project is to perform sentiment analysis on user reviews from the gaming platform Steam using the transformers library and the Hugging Face framework.
+In this project, we will be using a transformer-based model to classify the sentiment of user reviews as either positive or negative. The dataset contains more than 6 million user entries and is available on Kaggle.
+
+The idea is to download a model like BERT or DistilBERT with pre-trained weights and then fine-tune it on our own specific dataset.  We will then evaluate the performance of the model on a held-out test set and use it to classify the sentiment of unseen reviews.
+
+Naturally, all components of the course should be implemented in the project (pipelines, deployment, monitoring, etc.), with the model supporting this.
+Applications of such a model and infrastructure include predicting review scores, building more advanced recommender systems based on what users find important, and assisting developers in predicting what users value in their games.
+
 # Exam template for 02476 Machine Learning Operations
 
 This is the report template for the exam. Please only remove the text formatted as with three dashes in front and behind
