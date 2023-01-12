@@ -67,7 +67,9 @@ class ReviewDataset:
         #self.processed.to_csv(self.out_folder)
 
 
-    
+        
+    def tokenize(cls, batch):
+        return ReviewDataset.tokenizer(batch['review_text'], padding=True, truncation=True)
 
     
 

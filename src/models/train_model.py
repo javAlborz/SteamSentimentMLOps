@@ -3,6 +3,8 @@ from datasets import load_dataset, Dataset, DatasetDict, ClassLabel, Value, load
 
 
 from src.data.make_dataset import ReviewDataset
+from src.models.model import SteamModel
+
 
 from transformers import AutoModelForSequenceClassification,Trainer, TrainingArguments, AutoTokenizer
 from sklearn.metrics import accuracy_score, f1_score
@@ -19,11 +21,10 @@ print(emotions_encoded['train'][:1])
 
 num_labels = 2
 
-model = (AutoModelForSequenceClassification
-         .from_pretrained(MODEL_CKPT, num_labels=num_labels))
-         #.to(device))
+model = SteamModel()
+#model = AutoModelForTokenClassification(MODEL_CKPT, num_labels=2)
 
-tokenizer = AutoTokenizer.from_pretrained(MODEL_CKPT)
+tokenizer = ReviewDataset.tokenizer
 
 def compute_metrics(pred):
     labels = pred.label_ids
@@ -34,7 +35,7 @@ def compute_metrics(pred):
 
 batch_size = 64
 logging_steps = len(emotions_encoded["train"]) // batch_size
-model_name = f"{MODEL_CKPT}-finetuned-emotion"
+model_name = f"{MODEL_CKPT}-finetuned-Steam"
 training_args = TrainingArguments(output_dir=model_name,
                                   num_train_epochs=2,
                                   learning_rate=2e-5,
@@ -53,5 +54,7 @@ trainer = Trainer(model=model, args=training_args,
                   eval_dataset=emotions_encoded["valid"],
                   tokenizer=tokenizer)
 trainer.train()
+
+
 
 
