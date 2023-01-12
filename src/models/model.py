@@ -13,11 +13,11 @@ class SteamModel(nn.Module):
         
         self.base_model = AutoModel.from_pretrained(MODEL_CKPT)
         self.dropout = nn.Dropout(0.5)
-        self.linear = nn.Linear(768, NUM_LABELS) # output features from bert is 768 and 2 is ur number of labels
+        self.linear = nn.Linear(768, NUM_LABELS) # output features from bert is 768 
         
     def forward(self, input_ids, attn_mask):
         outputs = self.base_model(input_ids, attention_mask=attn_mask)
-        # You write you new head here
+      
         outputs = self.dropout(outputs[0])
         outputs = self.linear(outputs)
         
