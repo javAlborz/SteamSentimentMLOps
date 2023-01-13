@@ -13,9 +13,9 @@ from sklearn.metrics import accuracy_score, f1_score
 MODEL_CKPT =  "distilbert-base-uncased"
 
 
-dataset = ReviewDataset('data/raw','data/processed', name=MODEL_CKPT)
+dataset = ReviewDataset('data/raw','data/processed', name=MODEL_CKPT, force=True)
 
-emotions_encoded = load_from_disk('data/processed')
+emotions_encoded = dataset.processed
 
 print(emotions_encoded['train'][:1])
 
@@ -56,6 +56,8 @@ trainer = Trainer(model=model, args=training_args,
                   train_dataset=emotions_encoded["train"],
                   eval_dataset=emotions_encoded["validation"],
                   tokenizer=tokenizer)
+
+# model is stuck on training, still gotta find out why
 trainer.train()
 
 

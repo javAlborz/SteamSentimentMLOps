@@ -11,7 +11,7 @@ import numpy as np
 import torch
 import re
 from transformers import AutoTokenizer
-from datasets import load_dataset, Dataset, DatasetDict, ClassLabel, Value
+from datasets import load_dataset, Dataset, DatasetDict, ClassLabel, Value, load_from_disk
 
 
 MODEL_CKPT =  "distilbert-base-uncased"
@@ -20,10 +20,20 @@ OUT_FILE = '/preprocessed'
 
 class ReviewDataset:
 
-    def __init__(self, in_folder: str = '', out_folder: str = '', name =''):
+    def __init__(self, in_folder: str = '', out_folder: str = '', name ='', force = False):
         self.tokenizer = AutoTokenizer.from_pretrained(name)
         self.in_folder = in_folder
         self.out_folder = out_folder
+
+        if self.out_folder and not force:  # try loading from proprocessed
+            try:
+                self.processed = load_from_disk(out_folder)
+                print("Loaded from pre-processed files")
+                return
+            except ValueError:  # not created yet, we create instead
+                pass
+            
+
         self.df= pd.read_csv(in_folder +'\dataset.csv', usecols = ['review_text', 'review_score'], nrows = SAMPLE_SIZE)
 
         #preprocessing dataset in pandas
@@ -42,9 +52,8 @@ class ReviewDataset:
         new_features["labels"] = ClassLabel(names=[0, 1])
         self.ds = self.ds.cast(new_features)
 
-        # 90% train, 10% test + validation
+        #splitting train, test, validation
         train_testvalid = self.ds.train_test_split(test_size=0.4)
-        # Split the 10% test + valid in half test, half valid
         test_valid = train_testvalid['test'].train_test_split(test_size=0.5)
         # gather everyone if you want to have a single DatasetDict
         self.processed = DatasetDict({
@@ -52,13 +61,11 @@ class ReviewDataset:
             'test': test_valid['test'],
             'validation': test_valid['train']})  
         print(self.processed)
-        #self.ds = self.ds.train_test_split(test_size=0.2)
         self.processed = self.processed.map(self.tokenize, batched=True, batch_size=None, remove_columns = ['__index_level_0__'])
         print(self.processed)
-        #print(self.processed["train"].column_names)
 
         self.processed.save_to_disk(self.out_folder)
-        #self.processed.to_csv(self.out_folder)
+
 
 
     def tokenize(self, batch):
