@@ -20,32 +20,26 @@ OUT_FILE = '/preprocessed'
 
 class ReviewDataset:
 
-    tokenizer = AutoTokenizer.from_pretrained(MODEL_CKPT)
-
-    @classmethod
-    def tokenize(cls, batch):
-        return ReviewDataset.tokenizer(batch['review_text'], padding=True, truncation=True)
-
-
-    def __init__(self, in_folder: str = '', out_folder: str = ''):
+    def __init__(self, in_folder: str = '', out_folder: str = '', name =''):
+        self.tokenizer = AutoTokenizer.from_pretrained(name)
         self.in_folder = in_folder
         self.out_folder = out_folder
         self.df= pd.read_csv(in_folder +'\dataset.csv', usecols = ['review_text', 'review_score'], nrows = SAMPLE_SIZE)
 
         #preprocessing dataset in pandas
-        self.df.review_text = self.df.review_text.astype(str)
-        self.df = self.df[self.df['review_score'].notnull()]
-        self.df['review_text'] = self.df['review_text'].apply(lambda x: x.strip())
-        self.df["review_score"] = np.where(self.df["review_score"]==-1, 0, self.df["review_score"])
-        self.df = self.df[self.df.review_text != "Early Access Review"]
-        self.df = self.df[~self.df.review_text.isin(['nan'])]
-        self.df['review_text'] = self.df['review_text'].apply(lambda x: re.sub(r"[♥]+", ' **** ' ,x))
-
+        self.df = self.df.rename(columns={"review_text": "text", "review_score": "labels"})
+        self.df.text = self.df.text.astype(str)
+        self.df = self.df[self.df['labels'].notnull()]
+        self.df['text'] = self.df['text'].apply(lambda x: x.strip())
+        self.df["labels"] = np.where(self.df["labels"]==-1, 0, self.df["labels"])
+        self.df = self.df[self.df.text != "Early Access Review"]
+        self.df = self.df[~self.df.text.isin(['nan'])]
+        self.df['text'] = self.df['text'].apply(lambda x: re.sub(r"[♥]+", ' **** ' ,x))
 
         #converting to Dataset
         self.ds = Dataset.from_pandas(self.df)
         new_features = self.ds.features.copy()
-        new_features["review_score"] = ClassLabel(names=[0, 1])
+        new_features["labels"] = ClassLabel(names=[0, 1])
         self.ds = self.ds.cast(new_features)
 
         # 90% train, 10% test + validation
@@ -56,10 +50,10 @@ class ReviewDataset:
         self.processed = DatasetDict({
             'train': train_testvalid['train'],
             'test': test_valid['test'],
-            'valid': test_valid['train']})  
+            'validation': test_valid['train']})  
         print(self.processed)
         #self.ds = self.ds.train_test_split(test_size=0.2)
-        self.processed = self.processed.map(ReviewDataset.tokenize, batched=True, batch_size=None)
+        self.processed = self.processed.map(self.tokenize, batched=True, batch_size=None, remove_columns = ['__index_level_0__'])
         print(self.processed)
         #print(self.processed["train"].column_names)
 
@@ -67,9 +61,10 @@ class ReviewDataset:
         #self.processed.to_csv(self.out_folder)
 
 
-        
-    def tokenize(cls, batch):
-        return ReviewDataset.tokenizer(batch['review_text'], padding=True, truncation=True)
+    def tokenize(self, batch):
+        return self.tokenizer(batch['text'], padding=True, truncation=True)
+
+
 
     
 
@@ -82,6 +77,7 @@ def main(input_filepath, output_filepath):
     """
     logger = logging.getLogger(__name__)
     logger.info('making final data set from raw data')
+    dataset = ReviewDataset(input_filepath, output_filepath)
 
 
 if __name__ == '__main__':

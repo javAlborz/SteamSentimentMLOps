@@ -8,15 +8,15 @@ NUM_LABELS = 2
 
 
 class SteamModel(nn.Module):
-    def __init__(self):
+    def __init__(self, name):
         super(SteamModel, self).__init__()
         
-        self.base_model = AutoModel.from_pretrained(MODEL_CKPT)
+        self.base_model = AutoModel.from_pretrained(name)
         self.dropout = nn.Dropout(0.5)
         self.linear = nn.Linear(768, NUM_LABELS) # output features from bert is 768 
         
-    def forward(self, input_ids, attn_mask):
-        outputs = self.base_model(input_ids, attention_mask=attn_mask)
+    def forward(self, input_ids=None, attention_mask=None,labels=None):
+        outputs = self.base_model(input_ids, attention_mask=attention_mask)
       
         outputs = self.dropout(outputs[0])
         outputs = self.linear(outputs)

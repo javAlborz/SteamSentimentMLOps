@@ -13,7 +13,7 @@ from sklearn.metrics import accuracy_score, f1_score
 MODEL_CKPT =  "distilbert-base-uncased"
 
 
-dataset = ReviewDataset('data/raw','data/processed')
+dataset = ReviewDataset('data/raw','data/processed', name=MODEL_CKPT)
 
 emotions_encoded = load_from_disk('data/processed')
 
@@ -21,10 +21,10 @@ print(emotions_encoded['train'][:1])
 
 num_labels = 2
 
-model = SteamModel()
+model = SteamModel(name=MODEL_CKPT)
 #model = AutoModelForTokenClassification(MODEL_CKPT, num_labels=2)
 
-tokenizer = ReviewDataset.tokenizer
+tokenizer = dataset.tokenizer
 
 def compute_metrics(pred):
     labels = pred.label_ids
@@ -36,6 +36,9 @@ def compute_metrics(pred):
 batch_size = 64
 logging_steps = len(emotions_encoded["train"]) // batch_size
 model_name = f"{MODEL_CKPT}-finetuned-Steam"
+
+#model(input, MODEL_CKPT)
+
 training_args = TrainingArguments(output_dir=model_name,
                                   num_train_epochs=2,
                                   learning_rate=2e-5,
@@ -51,7 +54,7 @@ training_args = TrainingArguments(output_dir=model_name,
 trainer = Trainer(model=model, args=training_args, 
                   compute_metrics=compute_metrics,
                   train_dataset=emotions_encoded["train"],
-                  eval_dataset=emotions_encoded["valid"],
+                  eval_dataset=emotions_encoded["validation"],
                   tokenizer=tokenizer)
 trainer.train()
 
