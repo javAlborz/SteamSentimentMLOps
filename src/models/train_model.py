@@ -8,12 +8,13 @@ from src.data.make_dataset import ReviewDataset
 from src.models.model import SteamModel
 
 
+SAMPLE_SIZE = 1000
 
+MODEL_CKPT =  "distilbert-base-uncased"
 
-MODEL_CKPT =  "bert-base-uncased"
+NUM_LABELS = 2
 
-
-dataset = ReviewDataset('data/raw','data/processed', name=MODEL_CKPT, force=True)
+dataset = ReviewDataset('data/raw','data/processed', name=MODEL_CKPT, sample_size=SAMPLE_SIZE, force=True)
 
 tokenized_dataset = dataset.processed
 
@@ -24,7 +25,7 @@ data_collator = DataCollatorWithPadding(tokenizer=tokenizer)
 
 print(tokenized_dataset['train'][:1])
 
-NUM_LABELS = 2
+
 
 model = SteamModel(MODEL_CKPT, NUM_LABELS)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -73,4 +74,4 @@ trainer = Trainer(model=model, args=training_args,
                   tokenizer=tokenizer)
 
 # model is stuck on training, still gotta find out why
-#trainer.train()
+trainer.train()
