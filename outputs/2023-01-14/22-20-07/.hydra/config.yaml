@@ -1,0 +1,11 @@
+params:
+  sample_size: 1000
+  model_ckpt: distilbert-base-uncased
+  num_labels: 2
+  batch_size: 32
+  epochs: 3
+  lr: 2.0e-05
+  weight_decay: 0.01
+paths:
+  in_folder: ../data/raw
+  out_folder: data/processed

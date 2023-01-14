@@ -16,7 +16,6 @@ from datasets import load_dataset, Dataset, DatasetDict, ClassLabel, Value, load
 
 MODEL_CKPT =  "bert-base-uncased"
 SAMPLE_SIZE = 100
-OUT_FILE = '/preprocessed'
 
 class ReviewDataset:
 
@@ -34,8 +33,8 @@ class ReviewDataset:
                 pass
             
 
-        self.df= pd.read_csv(in_folder +'\dataset.csv', usecols = ['review_text', 'review_score'])
-        self.df = self.df.sample(n = SAMPLE_SIZE)
+        self.df= pd.read_csv(in_folder +'/dataset.csv', usecols = ['review_text', 'review_score'])
+        self.df = self.df.sample(n = sample_size)
         #preprocessing dataset in pandas
         self.df = self.df.rename(columns={"review_text": "text", "review_score": "label"})
         self.df.text = self.df.text.astype(str)
