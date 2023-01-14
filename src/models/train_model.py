@@ -1,5 +1,6 @@
 import torch
 import evaluate
+import numpy as np
 from datasets import load_dataset, Dataset, DatasetDict, ClassLabel, Value, load_from_disk
 from transformers import AutoModelForSequenceClassification,Trainer, TrainingArguments, AutoTokenizer, DataCollatorWithPadding
 from sklearn.metrics import accuracy_score, f1_score
@@ -14,11 +15,11 @@ MODEL_CKPT =  "distilbert-base-uncased"
 
 NUM_LABELS = 2
 
-dataset = ReviewDataset('data/raw','data/processed', name=MODEL_CKPT, sample_size=SAMPLE_SIZE, force=True)
+emotions_encoded = ReviewDataset('data/raw','data/processed', name=MODEL_CKPT, sample_size=SAMPLE_SIZE, force=True)
 
-tokenized_dataset = dataset.processed
+tokenized_dataset = emotions_encoded.processed
 
-tokenizer = dataset.tokenizer
+tokenizer = emotions_encoded.tokenizer
 
 tokenized_dataset.set_format("torch",columns=["input_ids", "attention_mask", "label"])
 data_collator = DataCollatorWithPadding(tokenizer=tokenizer)
@@ -33,7 +34,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 #model = AutoModelForSequenceClassification.from_config(config)
 model.to(device)
 
-tokenizer = dataset.tokenizer
+
 
 def compute_metrics(eval_preds):
     metric = evaluate.load("glue", "mrpc")
