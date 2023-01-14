@@ -13,16 +13,6 @@ from src.models.model import SteamModel
 from src.models.config import SteamConfig
 
 
-
-SAMPLE_SIZE = 1000
-MODEL_CKPT =  "distilbert-base-uncased"
-NUM_LABELS = 2
-BATCH_SIZE = 32
-EPOCHS = 3
-LR = 2e-5
-WEIGHT_DECAY = 0.01
-
-
 def compute_metrics(eval_preds):
     metric = evaluate.load("glue", "mrpc")
     logits, labels = eval_preds
