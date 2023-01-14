@@ -15,18 +15,9 @@ MODEL_CKPT =  "distilbert-base-uncased"
 
 NUM_LABELS = 2
 
-emotions_encoded = ReviewDataset('data/raw','data/processed', name=MODEL_CKPT, sample_size=SAMPLE_SIZE, force=True)
-
-tokenized_dataset = emotions_encoded.processed
-
-tokenizer = emotions_encoded.tokenizer
-
-tokenized_dataset.set_format("torch",columns=["input_ids", "attention_mask", "label"])
-data_collator = DataCollatorWithPadding(tokenizer=tokenizer)
-
-print(tokenized_dataset['train'][:1])
-
-
+processed_data = ReviewDataset('data/raw','data/processed', name=MODEL_CKPT, sample_size=SAMPLE_SIZE, force=False)
+emotions_encoded = processed_data.processed
+tokenizer = processed_data.tokenizer
 
 model = SteamModel(MODEL_CKPT, NUM_LABELS)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -71,7 +62,7 @@ training_args = TrainingArguments(output_dir=model_name,
 trainer = Trainer(model=model, args=training_args, 
                   #compute_metrics=compute_metrics,
                   train_dataset=emotions_encoded["train"],
-                  eval_dataset=emotions_encoded["validation"],
+                  eval_dataset=emotions_encoded["valid"],
                   tokenizer=tokenizer)
 
 # model is stuck on training, still gotta find out why
