@@ -14,13 +14,13 @@ from transformers import AutoTokenizer
 from datasets import load_dataset, Dataset, DatasetDict, ClassLabel, Value, load_from_disk
 
 
-MODEL_CKPT =  "distilbert-base-uncased"
-SAMPLE_SIZE = 10000
+MODEL_CKPT =  "bert-base-uncased"
+SAMPLE_SIZE = 100
 OUT_FILE = '/preprocessed'
 
 class ReviewDataset:
 
-    def __init__(self, in_folder: str = '', out_folder: str = '', name ='', force = False):
+    def __init__(self, in_folder: str = '', out_folder: str = '', name ='',sample_size = SAMPLE_SIZE, force = False):
         self.tokenizer = AutoTokenizer.from_pretrained(name)
         self.in_folder = in_folder
         self.out_folder = out_folder
@@ -34,23 +34,24 @@ class ReviewDataset:
                 pass
             
 
-        self.df= pd.read_csv(in_folder +'\dataset.csv', usecols = ['review_text', 'review_score'], nrows = SAMPLE_SIZE)
-
+        self.df= pd.read_csv(in_folder +'\dataset.csv', usecols = ['review_text', 'review_score'])
+        self.df = self.df.sample(n = SAMPLE_SIZE)
         #preprocessing dataset in pandas
-        self.df = self.df.rename(columns={"review_text": "text", "review_score": "labels"})
+        self.df = self.df.rename(columns={"review_text": "text", "review_score": "label"})
         self.df.text = self.df.text.astype(str)
-        self.df = self.df[self.df['labels'].notnull()]
+        self.df.label = self.df.label.astype(int)
+        self.df = self.df[self.df['label'].notnull()]
         self.df['text'] = self.df['text'].apply(lambda x: x.strip())
-        self.df["labels"] = np.where(self.df["labels"]==-1, 0, self.df["labels"])
+        self.df["label"] = self.df["label"].apply(lambda x: 'pos' if x > 0 else 'neg') #np.where(self.df["label"]==-1, 0, self.df["label"])
         self.df = self.df[self.df.text != "Early Access Review"]
         self.df = self.df[~self.df.text.isin(['nan'])]
         self.df['text'] = self.df['text'].apply(lambda x: re.sub(r"[♥]+", ' **** ' ,x))
 
         #converting to Dataset
-        self.ds = Dataset.from_pandas(self.df)
-        new_features = self.ds.features.copy()
-        new_features["labels"] = ClassLabel(names=[0, 1])
-        self.ds = self.ds.cast(new_features)
+        self.ds = Dataset.from_pandas(self.df).remove_columns(['__index_level_0__']).cast_column("label", ClassLabel(num_classes=2, names=['neg', 'pos'], names_file=None, id=None))
+        #new_features = self.ds.features.copy()
+        #new_features["label"] = ClassLabel(num_classes=2, names=['neg', 'pos'], names_file=None, id=None)
+        #self.ds = self.ds.cast(new_features)
 
         #splitting train, test, validation
         train_testvalid = self.ds.train_test_split(test_size=0.4)
@@ -59,10 +60,10 @@ class ReviewDataset:
         self.processed = DatasetDict({
             'train': train_testvalid['train'],
             'test': test_valid['test'],
-            'validation': test_valid['train']})  
-        print(self.processed)
-        self.processed = self.processed.map(self.tokenize, batched=True, batch_size=None, remove_columns = ['__index_level_0__'])
-        print(self.processed)
+            'valid': test_valid['train']})  
+        #print(self.processed)
+        self.processed = self.processed.map(self.tokenize, batched=True, batch_size=None)#, remove_columns = ['__index_level_0__'])
+        print(self.processed['train'][0])
 
         self.processed.save_to_disk(self.out_folder)
 
