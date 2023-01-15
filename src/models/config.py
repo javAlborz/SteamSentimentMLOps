@@ -14,6 +14,7 @@ class Params:
     epochs: int
     lr: float
     weight_decay: float
+    run_name: str
 
 @dataclass
 class SteamConfig:

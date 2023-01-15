@@ -3,6 +3,8 @@ import evaluate
 import numpy as np
 import hydra
 from hydra.core.config_store import ConfigStore
+import wandb
+import os
 
 from datasets import load_dataset, Dataset, DatasetDict, ClassLabel, Value, load_from_disk
 from transformers import AutoModelForSequenceClassification,Trainer, TrainingArguments, AutoTokenizer, DataCollatorWithPadding
@@ -11,6 +13,11 @@ from sklearn.metrics import accuracy_score, f1_score
 from src.data.make_dataset import ReviewDataset
 from src.models.model import SteamModel
 from src.models.config import SteamConfig
+
+os.environ["WANDB_PROJECT"] = 'steam_sentiment_analysis'
+os.environ["WANDB_LOG_MODEL"] = 'true'
+wandb.login()
+
 
 
 def compute_metrics(eval_preds):
@@ -46,7 +53,6 @@ def main(cfg:SteamConfig):
     logging_steps = len(emotions_encoded["train"]) // cfg.params.batch_size
     model_name = f"{cfg.params.model_ckpt}-finetuned-Steam"
 
-    #model(input, MODEL_CKPT)
 
     training_args = TrainingArguments(output_dir=model_name,
                                     num_train_epochs=cfg.params.epochs,
@@ -58,7 +64,9 @@ def main(cfg:SteamConfig):
                                     disable_tqdm=False,
                                     logging_steps=logging_steps,
                                     push_to_hub=False, 
-                                    log_level="error")
+                                    log_level="error",
+                                    report_to = 'wandb',
+                                    run_name = cfg.params.run_name)
                                     
     trainer = Trainer(model=model, args=training_args, 
                     #compute_metrics=compute_metrics,
@@ -66,7 +74,7 @@ def main(cfg:SteamConfig):
                     eval_dataset=emotions_encoded["valid"],
                     tokenizer=tokenizer)
 
-    # model is stuck on training, still gotta find out why
+    # model takes a hella lot of memory. To run locally try decreasing batch_size by a lot :/
     trainer.train()
     #trainer.save_model('models/')
 

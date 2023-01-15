@@ -8,3 +8,6 @@ scikit_learn==1.2.0
 setuptools==65.5.0
 torch==1.13.1
 transformers==4.24.0
+evaluate
+hydra
+wandb

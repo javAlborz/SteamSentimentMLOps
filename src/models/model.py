@@ -2,12 +2,10 @@ from transformers import AutoModelForTokenClassification, AutoModel, AutoConfig
 from transformers.modeling_outputs import TokenClassifierOutput
 import torch.nn as nn
 
-MODEL_CKPT =  "bert-base-uncased"
-NUM_LABELS = 2
 
 #model = AutoModelForTokenClassification(MODEL_CKPT, num_labels=2)
 class SteamModel(nn.Module):
-  
+
   def __init__(self,MODEL_CKPT,NUM_LABELS): 
     super(SteamModel,self).__init__() 
     self.num_labels = NUM_LABELS 

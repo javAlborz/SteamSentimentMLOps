@@ -1,10 +1,10 @@
 params:
   sample_size: 1000
-  model_ckpt:  "distilbert-base-uncased"
+  model_ckpt: distilbert-base-uncased
   num_labels: 2
   batch_size: 32
   epochs: 3
-  lr: 2e-5
+  lr: 2.0e-05
   weight_decay: 0.01
   run_name: simple_run
 paths:
