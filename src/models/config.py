@@ -17,6 +17,6 @@ class Params:
     run_name: str
 
 @dataclass
-class SteamConfig:
+class SteamConfigClass:
     paths: Paths
     params: Params

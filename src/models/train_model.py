@@ -11,8 +11,8 @@ from transformers import AutoModelForSequenceClassification,Trainer, TrainingArg
 from sklearn.metrics import accuracy_score, f1_score
 
 from src.data.make_dataset import ReviewDataset
-from src.models.model import SteamModel
-from src.models.config import SteamConfig
+from src.models.model import SteamModel, SteamConfig
+from src.models.config import SteamConfigClass
 
 os.environ["WANDB_PROJECT"] = 'steam_sentiment_analysis'
 os.environ["WANDB_LOG_MODEL"] = 'true'
@@ -34,16 +34,18 @@ def compute_metrics(eval_preds):
     return metric.compute(predictions=predictions, references=labels)
 
 cs = ConfigStore.instance()
-cs.store(name='steam_config', node = SteamConfig)
+cs.store(name='steam_config', node = SteamConfigClass)
 
 @hydra.main(config_path='conf', config_name='config.yaml')
-def main(cfg:SteamConfig):
+def main(cfg:SteamConfigClass):
 
     processed_data = ReviewDataset(cfg.paths.in_folder, cfg.paths.out_folder, name=cfg.params.model_ckpt, sample_size=cfg.params.sample_size, force=False)
     emotions_encoded = processed_data.processed
     tokenizer = processed_data.tokenizer
 
-    model = SteamModel(cfg.params.model_ckpt, cfg.params.num_labels)
+
+    config = SteamConfig()
+    model = SteamModel(config, cfg.params.model_ckpt, cfg.params.num_labels)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     #config = AutoConfig.from_pretrained(MODEL_CKPT)
     #model = AutoModelForSequenceClassification.from_config(config)
@@ -75,7 +77,7 @@ def main(cfg:SteamConfig):
 
     # model takes a hella lot of memory. To run locally try decreasing batch_size by a lot :/
     trainer.train()
-    #trainer.save_model('models/')
+    trainer.save_model('models/')
 
 if __name__ == "__main__":
     main()
