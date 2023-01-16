@@ -29,4 +29,4 @@ class SteamModel(nn.Module):
       loss_fct = nn.CrossEntropyLoss()
       loss = loss_fct(logits.view(-1, self.num_labels), labels.view(-1))
     
-    return TokenClassifierOutput(loss=loss, logits=logits, hidden_states=outputs.hidden_states,attentions=outputs.attentions)
+    return TokenClassifierOutput(loss=loss, logits=logits, hidden_states=None,attentions=None)

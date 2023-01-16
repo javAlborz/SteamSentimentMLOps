@@ -20,19 +20,18 @@ wandb.login()
 
 
 
-def compute_metrics(eval_preds):
-    metric = evaluate.load("glue", "mrpc")
-    logits, labels = eval_preds
-    predictions = np.argmax(logits, axis=-1)
-    return metric.compute(predictions=predictions, references=labels)
-
-
 def compute_metrics(pred):
     labels = pred.label_ids
     preds = pred.predictions[0].argmax(-1)
     f1 = f1_score(labels, preds, average="weighted")
     acc = accuracy_score(labels, preds)
     return {"accuracy": acc, "f1": f1}
+
+def compute_metrics(eval_preds):
+    metric = evaluate.load("glue", "mrpc")
+    logits, labels = eval_preds
+    predictions = np.argmax(logits, axis=-1)
+    return metric.compute(predictions=predictions, references=labels)
 
 cs = ConfigStore.instance()
 cs.store(name='steam_config', node = SteamConfig)
@@ -69,7 +68,7 @@ def main(cfg:SteamConfig):
                                     run_name = cfg.params.run_name)
                                     
     trainer = Trainer(model=model, args=training_args, 
-                    #compute_metrics=compute_metrics,
+                    compute_metrics=compute_metrics,
                     train_dataset=emotions_encoded["train"],
                     eval_dataset=emotions_encoded["valid"],
                     tokenizer=tokenizer)
