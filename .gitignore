@@ -89,3 +89,7 @@ target/
 .mypy_cache/
 /data
 /models
+
+
+# hydra
+outputs/
