@@ -11,3 +11,5 @@ transformers==4.24.0
 evaluate
 hydra
 wandb
+# local package
+-e .

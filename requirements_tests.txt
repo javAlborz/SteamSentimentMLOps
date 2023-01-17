@@ -1,0 +1,6 @@
+# requirements needed for tests
+pytest==7.2.0
+flake8 # general coding practices
+coverage # code coverage
+isort # remove unused imports
+mypy # typing (x: Int, etc.)
