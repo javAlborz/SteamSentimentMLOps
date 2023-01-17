@@ -7,7 +7,7 @@ import wandb
 import os
 
 from datasets import load_dataset, Dataset, DatasetDict, ClassLabel, Value, load_from_disk
-from transformers import AutoModelForSequenceClassification,Trainer, TrainingArguments, AutoTokenizer, DataCollatorWithPadding
+from transformers import AutoModelForSequenceClassification,Trainer, TrainingArguments, AutoTokenizer, DataCollatorWithPadding, AutoConfig
 from sklearn.metrics import accuracy_score, f1_score
 
 from src.data.make_dataset import ReviewDataset
@@ -47,7 +47,7 @@ def main(cfg:SteamConfigClass):
     config = SteamConfig()
     model = SteamModel(config, cfg.params.model_ckpt, cfg.params.num_labels)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    #config = AutoConfig.from_pretrained(MODEL_CKPT)
+    #config = AutoConfig.from_pretrained(cfg.params.model_ckpt)
     #model = AutoModelForSequenceClassification.from_config(config)
     model.to(device)
 
@@ -61,9 +61,10 @@ def main(cfg:SteamConfigClass):
                                     per_device_train_batch_size=cfg.params.batch_size,
                                     per_device_eval_batch_size=cfg.params.batch_size,
                                     weight_decay=cfg.params.weight_decay,
-                                    evaluation_strategy="epoch",
+                                    evaluation_strategy="steps",
+                                    save_strategy = "steps",
                                     disable_tqdm=False,
-                                    logging_steps=logging_steps,
+                                    logging_steps=1,
                                     push_to_hub=False, 
                                     log_level="error",
                                     report_to = 'wandb',
