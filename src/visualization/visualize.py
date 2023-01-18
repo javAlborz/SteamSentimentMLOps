@@ -7,7 +7,7 @@ from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 from torch.utils.data import DataLoader
 import matplotlib.pyplot as plt
 
-from transformers import AutoTokenizer, AutoModel, AutoTokenizer, AutoModel, AutoConfig
+from transformers import AutoModel, AutoModel, AutoConfig
 from src.models.model import SteamModel, SteamConfig
 from src.models.config import SteamConfigClass
 from src.data.make_dataset import ReviewDataset
@@ -23,7 +23,6 @@ def visualize(cfg:SteamConfigClass) -> None:
     AutoConfig.register("SteamModel", SteamConfig)
     AutoModel.register(SteamConfig, SteamModel)
     model = AutoModel.from_pretrained(cwd+"\models", cfg.params.model_ckpt, cfg.params.num_labels)
-    tokenizer =  AutoTokenizer.from_pretrained(cwd+'\models')
 
     processed_data = ReviewDataset(cfg.paths.in_folder, cfg.paths.out_folder, name=cfg.params.model_ckpt, sample_size=cfg.params.sample_size, force=True)
     emotions_encoded = processed_data.processed
