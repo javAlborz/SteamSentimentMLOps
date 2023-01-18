@@ -15,14 +15,14 @@ from src.data.make_dataset import ReviewDataset
 cs = ConfigStore.instance()
 cs.store(name='steam_config', node = SteamConfigClass)
 cwd = os.getcwd()
-@hydra.main(config_path=cwd+'\src\models\conf', config_name='config.yaml')
+@hydra.main(config_path=cwd+'/src/models/conf', config_name='config.yaml')
 def visualize(cfg:SteamConfigClass) -> None:
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
     AutoConfig.register("SteamModel", SteamConfig)
     AutoModel.register(SteamConfig, SteamModel)
-    model = AutoModel.from_pretrained(cwd+"\models", cfg.params.model_ckpt, cfg.params.num_labels)
+    model = AutoModel.from_pretrained(cwd+"/models", cfg.params.model_ckpt, cfg.params.num_labels)
 
     processed_data = ReviewDataset(cfg.paths.in_folder, cfg.paths.out_folder, name=cfg.params.model_ckpt, sample_size=cfg.params.sample_size, force=True)
     emotions_encoded = processed_data.processed
