@@ -4,3 +4,4 @@ flake8 # general coding practices
 coverage # code coverage
 isort # remove unused imports
 mypy # typing (x: Int, etc.)
+pylint
