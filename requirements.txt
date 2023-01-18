@@ -11,6 +11,6 @@ transformers==4.24.0
 evaluate
 hydra-core
 matplotlib
-wandb-core
+wandb
 # local package
 -e .
