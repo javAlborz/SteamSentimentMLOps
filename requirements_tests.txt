@@ -4,3 +4,18 @@ flake8 # general coding practices
 coverage # code coverage
 isort # remove unused imports
 mypy # typing (x: Int, etc.)
+
+# requirements for pylint
+click==8.1.3
+datasets==2.6.1
+Markdown==3.4.1
+numpy==1.24.1
+pandas==1.5.2
+python-dotenv==0.21.0
+scikit_learn==1.2.0
+setuptools==65.5.0
+torch==1.13.1
+transformers==4.24.0
+evaluate
+hydra
+wandb
