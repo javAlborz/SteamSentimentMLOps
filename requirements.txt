@@ -9,7 +9,7 @@ setuptools==65.5.0
 torch==1.13.1
 transformers==4.24.0
 evaluate
-hydra
+hydra-core
 wandb
 # local package
 -e .
