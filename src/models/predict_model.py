@@ -7,13 +7,20 @@ from transformers import AutoTokenizer, TextClassificationPipeline, AutoModel, A
 from src.models.model import SteamModel, SteamConfig
 
 
-def predict() -> None:
-    parser = argparse.ArgumentParser(description="Training arguments")
-    #parser.add_argument("model_checkpoint", type=str)
-    parser.add_argument("--text", type=str, required=True)
-    args = parser.parse_args()
-    print(args)
+def predict(text: str) -> TextClassificationPipeline:
+    """
+    Predict whether review is positive or negative based on text.
 
+    Parameters
+    ----------
+    text : str
+        Review text.
+
+    Returns
+    -------
+    TextClassificationPipeline
+        Result of prediction
+    """
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
     AutoConfig.register("SteamModel", SteamConfig)
@@ -29,11 +36,20 @@ def predict() -> None:
 
     new_model.to(device)
 
-    text = args.text
     pipe = TextClassificationPipeline(
         model=new_model, tokenizer=tokenizer, return_all_scores=True)
-    print(pipe(text))
+
+    return pipe(text)
 
 
 if __name__ == "__main__":
-    predict()
+    # when predict_model.py is being run from command line it takes in review text to predict with
+
+    parser = argparse.ArgumentParser(description="Training arguments")
+    #parser.add_argument("model_checkpoint", type=str)
+    parser.add_argument("--text", type=str, required=True)
+    args = parser.parse_args()
+
+    result = predict(args.text)
+
+    print(result)
