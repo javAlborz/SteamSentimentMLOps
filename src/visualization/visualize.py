@@ -1,13 +1,13 @@
-import numpy as np
 import torch
 import hydra
 import os
+import numpy as np
 from hydra.core.config_store import ConfigStore
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 from torch.utils.data import DataLoader
 import matplotlib.pyplot as plt
 
-from transformers import AutoTokenizer, BertTokenizer, BertForMaskedLM, TextClassificationPipeline, AutoModel, AutoTokenizer, AutoModel, AutoConfig
+from transformers import AutoTokenizer, AutoModel, AutoTokenizer, AutoModel, AutoConfig
 from src.models.model import SteamModel, SteamConfig
 from src.models.config import SteamConfigClass
 from src.data.make_dataset import ReviewDataset
@@ -31,15 +31,15 @@ def visualize(cfg:SteamConfigClass) -> None:
     lists = []
     test_set =torch.tensor(emotions_encoded['test']['input_ids']).to(device)
     loader = DataLoader(test_set, batch_size=8)
-    for idx, batch in enumerate(loader):
+    for batch in loader:
         model_predictions = model(batch)
         y_preds = torch.argmax(model_predictions['logits'],1).to('cpu').numpy()
         lists.append(y_preds)
     preds = np.concatenate(lists)
 
     plt.rcParams["figure.figsize"] = (10,10)
-    cm = confusion_matrix(emotions_encoded['test']['label'], preds)
-    disp = ConfusionMatrixDisplay(confusion_matrix=cm)
+    confusion_mat = confusion_matrix(emotions_encoded['test']['label'], preds)
+    disp = ConfusionMatrixDisplay(confusion_matrix=confusion_mat)
     disp.plot()
     plt.savefig(cwd+"/reports/figures/confusion_matrix.png")
 
