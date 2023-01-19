@@ -58,7 +58,7 @@ def main(cfg: SteamConfigClass) -> None:
     config = SteamConfig()
     model = SteamModel(config, cfg.params.model_ckpt, cfg.params.num_labels)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    #config = AutoConfig.from_pretrained(MODEL_CKPT)
+    #config = AutoConfig.from_pretrained(cfg.params.model_ckpt)
     #model = AutoModelForSequenceClassification.from_config(config)
     model.to(device)
 
