@@ -13,7 +13,8 @@ RUN pip install dvc 'dvc[gs]'
 
 COPY requirements.txt /tmp/requirements.txt
 COPY setup.py setup.py
-RUN pip install --upgrade pip
+RUN python3.9 -m pip install --upgrade pip
+RUN python3.9 -m pip install libgit2
 RUN python3.9 -m pip install -r /tmp/requirements.txt --no-cache-dir
 
 RUN echo 'GOING TO COPY'
