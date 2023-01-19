@@ -1,53 +1,99 @@
 import logging
 logging.basicConfig(filename='app.log', level=logging.INFO)
-
-from transformers import VisionEncoderDecoderModel, ViTFeatureExtractor, AutoTokenizer
 import torch
 from PIL import Image
-
 import streamlit as st
 
+import argparse
+# import numpy as np
+import torch
+# import BertTokenizer, BertForMaskedLM
+from transformers import AutoTokenizer, TextClassificationPipeline, AutoModel, AutoConfig
+from src.models.model import SteamModel, SteamConfig
 
-model = VisionEncoderDecoderModel.from_pretrained("nlpconnect/vit-gpt2-image-captioning")       
-feature_extractor = ViTFeatureExtractor.from_pretrained("nlpconnect/vit-gpt2-image-captioning")
-tokenizer = AutoTokenizer.from_pretrained("nlpconnect/vit-gpt2-image-captioning")
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-model.to(device)
-gen_kwargs = {"max_length": 16, "num_beams": 8, "num_return_sequences": 1}
+
+
+# model = VisionEncoderDecoderModel.from_pretrained("nlpconnect/vit-gpt2-image-captioning")       
+# feature_extractor = ViTFeatureExtractor.from_pretrained("nlpconnect/vit-gpt2-image-captioning")
+# tokenizer = AutoTokenizer.from_pretrained("nlpconnect/vit-gpt2-image-captioning")
+# device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+# model.to(device)
+# gen_kwargs = {"max_length": 16, "num_beams": 8, "num_return_sequences": 1}
 
 @st.cache
-def predict_step(image_path):
-   print('here')
-   images=[]
-   i_image = Image.open(image_path)
-   if i_image.mode != "RGB":
-      i_image = i_image.convert(mode="RGB")
+def predict_step(text: str) -> TextClassificationPipeline:
+    """
+    Predict whether review is positive or negative based on text.
 
-   images.append(i_image)
-   pixel_values = feature_extractor(images=images, return_tensors="pt").pixel_values
-   pixel_values = pixel_values.to(device)
-   output_ids = model.generate(pixel_values, **gen_kwargs)
-   preds = tokenizer.batch_decode(output_ids, skip_special_tokens=True)
-   preds = [pred.strip() for pred in preds]
-   logging.info(preds)
-   print(preds)
-   return preds
+    Parameters
+    ----------
+    text : str
+        Review text.
 
+    Returns
+    -------
+    TextClassificationPipeline
+        Result of prediction
+    """
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+
+    AutoConfig.register("SteamModel", SteamConfig)
+    AutoModel.register(SteamConfig, SteamModel)
+    new_model = AutoModel.from_pretrained(
+        'models/', "distilbert-base-uncased", 2)
+    tokenizer = AutoTokenizer.from_pretrained('models/')
+
+    #new_model = SteamModel("distilbert-base-uncased", 2).from_pretrained('models/model_huggingface/')
+
+    #tokenizer = AutoTokenizer.from_pretrained('models/model_huggingface/')
+    #model = AutoModel.from_pretrained('models/model_huggingface/')
+
+    new_model.to(device)
+
+    pipe = TextClassificationPipeline(
+        model=new_model, tokenizer=tokenizer, return_all_scores=True)
+
+    return pipe(text)
+
+    
 def frontend():
     st.set_page_config(page_title="Image Captioning Model", page_icon=":guardsman:", layout="wide")
     st.title("Image Captioning Model")
-    uploaded_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
+    text = st.text_input("Enter your text")
 
-    if uploaded_file is not None:
-        image = Image.open(uploaded_file)
-        st.image(image, caption='Uploaded Image.', use_column_width='auto')
+    if text is not None:
+        st.write("Input text: " + text)
         if st.button("Predict"):
             with st.spinner("Making prediction..."):
-                preds = predict_step(uploaded_file)
+                preds = predict_step(text)
+                print(type(preds))
+                print(preds)
                 st.success("Prediction complete.")
-                st.write("Caption: " + preds[0])
+
+                for item in preds:
+                    label_0_score = 0
+                    label_1_score = 0
+                    for label_data in item:
+                        if label_data['label'] == 'LABEL_0':
+                            label_0_score = label_data['score']
+                        elif label_data['label'] == 'LABEL_1':
+                            label_1_score = label_data['score']
+                    if label_0_score > label_1_score:
+                        st.write("BAD review, score:" + str(label_0_score))
+                    else:
+                        st.write("GOOD review, score:" + str(label_1_score))
+
 
 if __name__ == "__main__":
+    # when predict_model.py is being run from command line it takes in review text to predict with
+
+    # parser = argparse.ArgumentParser(description="Training arguments")
+    # #parser.add_argument("model_checkpoint", type=str)
+    # parser.add_argument("--text", type=str, required=True)
+    # args = parser.parse_args()
+
+    #result = predict(args.text)
+
     frontend()
 
 
