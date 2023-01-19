@@ -20,8 +20,8 @@ SAMPLE_SIZE = 100
 
 class ReviewDataset:
 
-    def __init__(self, in_folder: str = '', out_folder: str = '', model_ckpt='', sample_size=SAMPLE_SIZE, force=False):
-        self.tokenizer = AutoTokenizer.from_pretrained(model_ckpt)
+    def __init__(self, in_folder: str = '', out_folder: str = '', name='', sample_size=SAMPLE_SIZE, force=False):
+        self.tokenizer = AutoTokenizer.from_pretrained(name)
         self.in_folder = in_folder
         self.out_folder = out_folder
 
@@ -65,11 +65,9 @@ class ReviewDataset:
             'train': train_testvalid['train'],
             'test': test_valid['test'],
             'valid': test_valid['train']})
-        # print(self.processed)
         # , remove_columns = ['__index_level_0__'])
         self.processed = self.processed.map(
             self.tokenize, batched=True, batch_size=None)
-        print(self.processed.column_names)
 
         self.processed.save_to_disk(self.out_folder)
 

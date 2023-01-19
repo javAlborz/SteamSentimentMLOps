@@ -6,7 +6,7 @@ from src.data.make_dataset import ReviewDataset
 sample_size = 1000
 num_labels = 2
 dataset = ReviewDataset(in_folder='data/raw', out_folder='data/processed',
-    model_ckpt='distilbert-base-uncased', sample_size=sample_size, force=True)
+    name='distilbert-base-uncased', sample_size=sample_size, force=True)
 dataset = dataset.processed
 
 def test_something_two():

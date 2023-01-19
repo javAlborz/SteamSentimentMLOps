@@ -25,7 +25,7 @@ def visualize(cfg:SteamConfigClass) -> None:
     AutoModel.register(SteamConfig, SteamModel)
     model = AutoModel.from_pretrained(cwd+"/models", cfg.params.model_ckpt, cfg.params.num_labels)
 
-    processed_data = ReviewDataset(cfg.paths.in_folder, cfg.paths.out_folder, model_ckpt=cfg.params.model_ckpt, sample_size=cfg.params.sample_size, force=True)
+    processed_data = ReviewDataset(cfg.paths.in_folder, cfg.paths.out_folder, name=cfg.params.model_ckpt, sample_size=cfg.params.sample_size, force=True)
     emotions_encoded = processed_data.processed
 
     list_preds, list_probas = [], []
