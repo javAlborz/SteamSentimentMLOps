@@ -1,5 +1,5 @@
 #!/bin/bash
-dvc pull
+#dvc pull
 wandb login $1
 python3.9 -u src/data/make_dataset.py $2
 python3.9 -u src/models/train_model.py
