@@ -51,7 +51,7 @@ def main(cfg: SteamConfigClass) -> None:
     """
 
     processed_data = ReviewDataset(cfg.paths.in_folder, cfg.paths.out_folder,
-                                   name=cfg.params.model_ckpt, sample_size=cfg.params.sample_size, force=True)
+                                   model_ckpt=cfg.params.model_ckpt, sample_size=cfg.params.sample_size, force=True)
     emotions_encoded = processed_data.processed
     tokenizer = processed_data.tokenizer
 

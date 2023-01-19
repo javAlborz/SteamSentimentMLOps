@@ -35,9 +35,9 @@ class SteamModel(PreTrainedModel):
         Setup model
 
         Args:
-            config (_type_): _description_
-            MODEL_CKPT (_type_): _description_
-            NUM_LABELS (_type_): _description_
+            config (SteamConfig):config object
+            MODEL_CKPT (str): base model to use e.g. "distilbert-base-uncased"
+            NUM_LABELS (int): number of labels for classification
         """
         super(SteamModel, self).__init__(config)
         self.config = config
