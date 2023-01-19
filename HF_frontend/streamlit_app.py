@@ -1,6 +1,5 @@
 import logging
 logging.basicConfig(filename='app.log', level=logging.INFO)
-from transformers import VisionEncoderDecoderModel, ViTFeatureExtractor, AutoTokenizer
 import torch
 from PIL import Image
 import streamlit as st
@@ -14,12 +13,12 @@ from src.models.model import SteamModel, SteamConfig
 
 
 
-model = VisionEncoderDecoderModel.from_pretrained("nlpconnect/vit-gpt2-image-captioning")       
-feature_extractor = ViTFeatureExtractor.from_pretrained("nlpconnect/vit-gpt2-image-captioning")
-tokenizer = AutoTokenizer.from_pretrained("nlpconnect/vit-gpt2-image-captioning")
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-model.to(device)
-gen_kwargs = {"max_length": 16, "num_beams": 8, "num_return_sequences": 1}
+# model = VisionEncoderDecoderModel.from_pretrained("nlpconnect/vit-gpt2-image-captioning")       
+# feature_extractor = ViTFeatureExtractor.from_pretrained("nlpconnect/vit-gpt2-image-captioning")
+# tokenizer = AutoTokenizer.from_pretrained("nlpconnect/vit-gpt2-image-captioning")
+# device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+# model.to(device)
+# gen_kwargs = {"max_length": 16, "num_beams": 8, "num_return_sequences": 1}
 
 @st.cache
 def predict_step(text: str) -> TextClassificationPipeline:
@@ -67,8 +66,23 @@ def frontend():
         if st.button("Predict"):
             with st.spinner("Making prediction..."):
                 preds = predict_step(text)
+                print(type(preds))
+                print(preds)
                 st.success("Prediction complete.")
-                st.write("Caption: " + preds.result)
+
+                for item in preds:
+                    label_0_score = 0
+                    label_1_score = 0
+                    for label_data in item:
+                        if label_data['label'] == 'LABEL_0':
+                            label_0_score = label_data['score']
+                        elif label_data['label'] == 'LABEL_1':
+                            label_1_score = label_data['score']
+                    if label_0_score > label_1_score:
+                        st.write("BAD review, score:" + str(label_0_score))
+                    else:
+                        st.write("GOOD review, score:" + str(label_1_score))
+
 
 if __name__ == "__main__":
     # when predict_model.py is being run from command line it takes in review text to predict with
