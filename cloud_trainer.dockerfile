@@ -12,10 +12,9 @@ RUN echo '[GoogleCompute]\nservice_account = default' > /etc/boto.cfg
 RUN pip install dvc 'dvc[gs]'
 
 COPY requirements.txt /tmp/requirements.txt
-COPY setup.py setup.py'
+COPY setup.py setup.py
 RUN pip install --upgrade pip
 RUN python3.9 -m pip install -r /tmp/requirements.txt --no-cache-dir
-
 
 RUN echo 'GOING TO COPY'
 COPY src/ src/
