@@ -15,9 +15,11 @@ COPY requirements.txt /tmp/requirements.txt
 COPY setup.py setup.py
 RUN python3.8 -m pip install -r /tmp/requirements.txt --no-cache-dir
 
+RUN echo 'GOING TO COPY'
 COPY src/ src/
 COPY .git/ .git/
 COPY .dvc/config .dvc/config
 COPY data/processed/ data/processed/
-COPY docker_run_training.sh docker_run_training.sh
-ENTRYPOINT ["./docker_run_training.sh"]
+COPY entry_training.sh entry_training.sh
+RUN echo 'ENTRY INCOMING'
+ENTRYPOINT ["./entry_training.sh"]
