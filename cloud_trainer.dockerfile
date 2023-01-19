@@ -20,6 +20,7 @@ RUN echo 'GOING TO COPY'
 COPY src/ src/
 COPY .git/ .git/
 COPY .dvc/config .dvc/config
+RUN dvc pull
 COPY data/processed/ data/processed/
 COPY entry_training.sh entry_training.sh
 RUN echo 'ENTRY INCOMING'
