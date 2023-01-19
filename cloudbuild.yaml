@@ -1,5 +1,6 @@
 steps:
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/dtumlopsnew-374310/testing', '.']
+  args: ['build', '-f', 'cloud_trainer.dockerfile', '-t',gcr.io/dtumlopsnew-374310/trainer:latest', '.']
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/dtumlopsnew-374310/testing']
+  args: ['push', 'gcr.io/dtumlopsnew-374310/trainer:latest']
+timeout: 4000s

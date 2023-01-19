@@ -1,5 +1,0 @@
-steps:
-   - name: 'gcr.io/cloud-builders/docker'
-     args: ['build', '-t', 'gcr.io/bold-syntax-374309/<image-name>', '.']
-   - name: 'gcr.io/cloud-builders/docker'
-     args: ['push', 'gcr.io/bold-syntax-374309/<image-name>']
