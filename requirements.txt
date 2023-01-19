@@ -11,5 +11,8 @@ transformers==4.24.0
 evaluate
 hydra-core
 wandb
+
+dvc
+dvc_gdrive
 # local package
 -e .
