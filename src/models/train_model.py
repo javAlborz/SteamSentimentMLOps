@@ -95,4 +95,5 @@ def main(cfg: SteamConfigClass) -> None:
 
 
 if __name__ == "__main__":
+    print("Testing trigger")
     main()
