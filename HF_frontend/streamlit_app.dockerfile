@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip3 install -r requirements_frontend.txt
+COPY requirements_frontend.txt /tmp/requirements_frontend.txt
+RUN pip3 install -r /tmp/requirements_frontend.txt
 
 ENTRYPOINT ["streamlit", "run", "streamlit_app.py", "--server.port=8501", "--server.address=0.0.0.0"]
