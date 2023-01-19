@@ -1,0 +1,6 @@
+pillow
+altair
+pandas
+streamlit
+transformers
+torch
