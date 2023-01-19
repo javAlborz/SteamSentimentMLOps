@@ -39,7 +39,7 @@ cs.store(name='steam_config', node = SteamConfigClass)
 @hydra.main(config_path='conf', config_name='config.yaml')
 def main(cfg:SteamConfigClass):
 
-    processed_data = ReviewDataset(cfg.paths.in_folder, cfg.paths.out_folder, name=cfg.params.model_ckpt, sample_size=cfg.params.sample_size, force=False)
+    processed_data = ReviewDataset(cfg.paths.in_folder, cfg.paths.out_folder, name=cfg.params.model_ckpt, sample_size=cfg.params.sample_size, force=True)
     emotions_encoded = processed_data.processed
     tokenizer = processed_data.tokenizer
 
