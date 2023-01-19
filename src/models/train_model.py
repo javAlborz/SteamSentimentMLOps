@@ -11,6 +11,7 @@ import os
 from transformers import Trainer, TrainingArguments
 from sklearn.metrics import accuracy_score, f1_score
 
+
 from src.data.make_dataset import ReviewDataset
 from src.models.model import SteamModel, SteamConfig
 from src.models.config import SteamConfigClass
@@ -20,15 +21,16 @@ os.environ["WANDB_LOG_MODEL"] = 'true'
 wandb.login()
 
 
-def compute_metrics(pred):
-    labels = pred.label_ids
-    preds = pred.predictions[0].argmax(-1)
-    f1 = f1_score(labels, preds, average="weighted")
-    acc = accuracy_score(labels, preds)
-    return {"accuracy": acc, "f1": f1}
+def compute_metrics(eval_preds) -> (dict | None):
+    """
+    Function utilized by transformers.Trainer
 
+    Args:
+        eval_preds (_type_): _description_
 
-def compute_metrics(eval_preds):
+    Returns:
+        (dict | None): _description_
+    """
     metric = evaluate.load("glue", "mrpc")
     logits, labels = eval_preds
     predictions = np.argmax(logits, axis=-1)
@@ -40,7 +42,13 @@ cs.store(name='steam_config', node=SteamConfigClass)
 
 
 @hydra.main(config_path='conf', config_name='config.yaml')
-def main(cfg: SteamConfigClass):
+def main(cfg: SteamConfigClass) -> None:
+    """
+    Train model based on config
+
+    Args:
+        cfg (SteamConfigClass): configuration file
+    """
 
     processed_data = ReviewDataset(cfg.paths.in_folder, cfg.paths.out_folder,
                                    name=cfg.params.model_ckpt, sample_size=cfg.params.sample_size, force=True)
@@ -54,23 +62,23 @@ def main(cfg: SteamConfigClass):
     #model = AutoModelForSequenceClassification.from_config(config)
     model.to(device)
 
-    logging_steps = len(emotions_encoded["train"]) // cfg.params.batch_size
+    #logging_steps = len(emotions_encoded["train"]) // cfg.params.batch_size
     model_name = f"{cfg.params.model_ckpt}-finetuned-Steam"
 
     training_args = TrainingArguments(output_dir=model_name,
-                                    num_train_epochs=cfg.params.epochs,
-                                    learning_rate=cfg.params.lr,
-                                    per_device_train_batch_size=cfg.params.batch_size,
-                                    per_device_eval_batch_size=cfg.params.batch_size,
-                                    weight_decay=cfg.params.weight_decay,
-                                    evaluation_strategy="steps",
-                                    save_strategy = "steps",
-                                    disable_tqdm=False,
-                                    logging_steps=1,
-                                    push_to_hub=False, 
-                                    log_level="error",
-                                    report_to = 'wandb',
-                                    run_name = cfg.params.run_name)
+                                      num_train_epochs=cfg.params.epochs,
+                                      learning_rate=cfg.params.lr,
+                                      per_device_train_batch_size=cfg.params.batch_size,
+                                      per_device_eval_batch_size=cfg.params.batch_size,
+                                      weight_decay=cfg.params.weight_decay,
+                                      evaluation_strategy="steps",
+                                      save_strategy = "steps", #"epoch" "steps" "no"
+                                      disable_tqdm=False,
+                                      logging_steps=1,
+                                      push_to_hub=False,
+                                      log_level="error",
+                                      report_to='wandb',
+                                      run_name=cfg.params.run_name)
 
     trainer = Trainer(model=model, args=training_args,
                       compute_metrics=compute_metrics,
@@ -80,8 +88,12 @@ def main(cfg: SteamConfigClass):
 
     # model takes a hella lot of memory. To run locally try decreasing batch_size by a lot :/
     trainer.train()
-    trainer.save_model('models/')
+    print("gonna save model")
+    trainer.save_model('models2/')
+    print("saved model")
+    #model.save_pretrained('models2/')
 
 
 if __name__ == "__main__":
+    print("Testing trigger")
     main()

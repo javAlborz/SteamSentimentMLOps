@@ -12,5 +12,8 @@ evaluate
 hydra-core
 matplotlib
 wandb
+
+dvc
+dvc_gdrive
 # local package
 -e .

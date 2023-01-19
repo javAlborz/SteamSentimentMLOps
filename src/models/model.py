@@ -5,10 +5,15 @@ import torch.nn as nn
 
 
 from transformers import PreTrainedModel, PretrainedConfig
-from transformers import AutoModel
 
 
 class SteamConfig(PretrainedConfig):
+    """
+    SteamConfig class
+
+    Extends PretrainedConfig class
+    """
+
     model_type = 'SteamModel'
 
     def __init__(self, important_param=42, **kwargs):
@@ -17,9 +22,23 @@ class SteamConfig(PretrainedConfig):
 
 
 class SteamModel(PreTrainedModel):
+    """
+    SteamModel class
+
+    Extends PreTrainedModel class
+    """
+
     config_class = SteamConfig
 
     def __init__(self, config, MODEL_CKPT, NUM_LABELS):
+        """
+        Setup model
+
+        Args:
+            config (_type_): _description_
+            MODEL_CKPT (_type_): _description_
+            NUM_LABELS (_type_): _description_
+        """
         super(SteamModel, self).__init__(config)
         self.config = config
         self.num_labels = NUM_LABELS
