@@ -10,6 +10,10 @@ torch==1.13.1
 transformers==4.24.0
 evaluate
 hydra-core
+matplotlib
 wandb
+
+dvc
+dvc_gdrive
 # local package
 -e .

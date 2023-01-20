@@ -6,7 +6,7 @@ params:
   epochs: 3
   lr: 2e-5
   weight_decay: 0.01
-  run_name: simple_run
+  run_name: 
 paths:
   in_folder: ${hydra:runtime.cwd}/data/raw
   out_folder: ${hydra:runtime.cwd}/data/processed
