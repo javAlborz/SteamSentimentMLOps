@@ -510,6 +510,8 @@ In total we spent around 8 dollars. Mostly for attempting to host inference with
 > *Whenever we commit code and puch to github, it auto triggers ... and ... . From there the diagram shows ...*
 >
 > Answer:
+      
+ The beginning of our pipeline is at the setup site, where we perform the tasks of cleaning, choosing the model, and uploading the data to Google drive via DVC. It is important to remember that we follow the cookie cutter format to build a database following the steps for sentiment analysis in game reviews on steam. After that, we create a repository having branches related to tests, main code and additionally features to the model, creating commits with relevant comments for the updates and if necessary the mrge for the main branch. For each commit and pull, tests were run using github actions and pylint trying to ensure the quality of the uploaded code. For each update to the repository we created a docker image to train the model where users could pull the latest image and at the same time test the front end interface we created with streamlit. We also tried to assemble all the steps developed so far locally in the cloud system, trying to save the data, train the model with all the data and deploy it by creating alert and performance monitoring rules, however due to image creation problems it was not possible, so we continued with the local operation rules. Overall the model became positive, with several experiments being run on W&B and standardization of hyperparameters using Hydra for testing the model change and performance.
 
 Our ML Ops architecture includes the following components:
 
@@ -574,3 +576,5 @@ Student s212676 was responsible for developing the make_dataset, train_model, an
 Student s222902 was responsible for CI/CD pipelines (linting and testing), GCloud deployment, and general code improvements.
 
 Student s212677 was responsible for running experiments, profilling, CI/CD Pipelines and DVC setup.
+
+Student s212503 was responsible for cloud integragion, docker images, and fron end setup using streamlit
