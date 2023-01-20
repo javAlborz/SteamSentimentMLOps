@@ -13,13 +13,17 @@ RUN pip install dvc 'dvc[gs]'
 
 COPY requirements.txt /tmp/requirements.txt
 COPY setup.py setup.py
+RUN python3.9 -m pip install --upgrade pip
 RUN python3.9 -m pip install -r /tmp/requirements.txt --no-cache-dir
 
 RUN echo 'GOING TO COPY'
 COPY src/ src/
 COPY .git/ .git/
 COPY .dvc/config .dvc/config
-COPY data/processed/ data/processed/
+
+COPY data.dvc data.dvc
+COPY models.dvc models.dvc
+
 COPY entry_training.sh entry_training.sh
 RUN echo 'ENTRY INCOMING'
 ENTRYPOINT ["./entry_training.sh"]
