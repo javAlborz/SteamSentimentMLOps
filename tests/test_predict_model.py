@@ -1,5 +1,6 @@
-#from tests import _PATH_DATA
-
+import os.path
+import pytest
+from tests import _PATH_DATA
 
 def test_something_one():
     assert True, "message"
