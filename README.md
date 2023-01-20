@@ -285,7 +285,7 @@ GitHub Actions have been setup for pylint and unittests. [pylint.yml](https://gi
 >
 > Answer:
 
-Using config files and Hydra we would have the default parameters and while running a new experiment we would overwrite the config file with new parameters so that the output model would be saved in the Hydra output folder. 
+Using config files and Hydra we would have the default parameters and while running a new experiment we would overwrite the config file with new parameters so that the output model would be saved in the Hydra output folder. Additionaly, each run could be monitored in weights and biases, with a new name attributed to it.
 
 TODO: Felipe check this
 
@@ -302,7 +302,7 @@ TODO: Felipe check this
 >
 > Answer:
 
-TODO: Felipe check this
+Every time we would run a new experiment, hydra would create a new folder with the config file used for that run. That way we could keep track of each model and all the used parameters to train it
 
 ### Question 14
 
