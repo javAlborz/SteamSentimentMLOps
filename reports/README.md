@@ -277,7 +277,7 @@ We use DVC to manage the data involved in the model, where we add the model, dat
 >
 > Answer:
 
-GitHub Actions have been setup for pylint and unittests. [pylint.yml](../.github/workflows/pylint.yml) runs pylint for all `.py` files according to the [config file](../.pylintrc). This config file specifies what . [tests.yml](../.github/workflows/tests.yml) runs all tests using pytest. 
+GitHub Actions have been setup for pylint and unittests. [pylint.yml](../.github/workflows/pylint.yml) runs pylint for all `.py` files according to the [config file](../.pylintrc). This config file specifies what things to test for (style, typing, imports, etc.), but also more specific things such as line lengths and good variable names. If the pylint score is lower than 8.0/10.0 then the check will fail and problems will have to be fixed, when it passes a pull request can be merged. [tests.yml](../.github/workflows/tests.yml) runs all tests using pytest. 
 
 ## Running code and tracking experiments
 
@@ -298,6 +298,12 @@ GitHub Actions have been setup for pylint and unittests. [pylint.yml](../.github
 
 Using config files and Hydra we would have the default parameters and while running a new experiment we would overwrite the config file with new parameters so that the output model would be saved in the Hydra output folder. Additionaly, each run could be monitored in weights and biases, with a new name attributed to it.
 
+Furthermore, we used argparser to determine batch and sample size. To run the model locally we used the following command:
+
+python src/models/train_model.py params.sample_size=100 params.batch_size=2
+
+Even though the model was run locally we could compare the experiments and try to understand what was happening with each run, to try to apply the same logic in the cloud.
+
 ### Question 13
 
 > **Reproducibility of experiments are important. Related to the last question, how did you secure that no information**
@@ -311,7 +317,7 @@ Using config files and Hydra we would have the default parameters and while runn
 >
 > Answer:
 
-Every time we would run a new experiment, hydra would create a new folder with the config file used for that run. That way we could keep track of each model and all the used parameters to train it
+We use config files. For every experiment, hydra created a new folder with the settings of that run, so it was possible to check the hyperparameters for that experiment. With this alternative it was possible to simplify the iteration and improvement process for the training and thus try to extract the maximum from the provided model. 
 
 ### Question 14
 
