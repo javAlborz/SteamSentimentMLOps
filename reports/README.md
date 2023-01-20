@@ -330,7 +330,7 @@ Every time we would run a new experiment, hydra would create a new folder with t
 >
 > Answer:
 
-TODO: Felipe check this
+See the wandb screenshot in [figure](figures/hugging_wandb.jpeg).
 
 ### Question 15
 
@@ -421,7 +421,7 @@ We used a variety of different types of VMs depending on the specific requiremen
 >
 > Answer:
 
---- question 19 fill here ---
+GCP bucket can be seen in [figure](figures/hugging_bucket.jpeg) and [figure](figures/hugging_bucket2.jpeg).
 
 ### Question 20
 
@@ -430,7 +430,7 @@ We used a variety of different types of VMs depending on the specific requiremen
 >
 > Answer:
 
---- question 20 fill here ---
+GCP container registry can be seen in [this figure](figures/hugging_registry.jpeg).
 
 ### Question 21
 
@@ -439,7 +439,7 @@ We used a variety of different types of VMs depending on the specific requiremen
 >
 > Answer:
 
---- question 21 fill here ---
+Cloud build history can be seen in [this figure](figures/hugging_build.jpeg) (this is only from one account, some other builds were made on other GCloud accounts).
 
 ### Question 22
 
@@ -455,7 +455,7 @@ We used a variety of different types of VMs depending on the specific requiremen
 >
 > Answer:
 
-We wrapped out model into a simple Streamlit interface. After attempting to deploy our model to the cloud with Cloud RUN, we ran into port issues. In the end we managed to deploy a frontend doing inference using our model locally.
+We wrapped out model into a simple Streamlit interface. After attempting to deploy our model to the cloud with Cloud RUN, we ran into port issues. In the end we managed to deploy a frontend doing inference using our model locally. Some screenshots of these are [figure](figures/hugging_cloud_run.png) and [figure](figures/hugging_vertex.png).
 
 ### Question 23
 
@@ -484,7 +484,7 @@ We did not manage to implement monitoring. We would like to have monitoring impl
 >
 > Answer:
 
-In total we spent around 8 dollars. Mostly for attempting to host inference with our predict script. A test version was sent in a groupchat with my friends, and they all tested the app several times.
+In total we spent around 8 dollars. Mostly for attempting to host inference with our predict script. A test version was sent in a groupchat with my friends, and they all tested the app several times. Some other credits were spent on prototyping and experimetation, in order to see what components worked best.
 
 ## Overall discussion of project
 
@@ -565,4 +565,4 @@ Student s202075 was in charge of cloud integration, and figuring out how to link
 
 Student s222676 was responsible for developing the make_dataset, train_model, and predict_model.py pipeline locally
 
-
+Student s222902 was responsible for CI/CD pipelines (linting and testing), GCloud deployment, and general code improvements.
