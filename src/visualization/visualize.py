@@ -30,7 +30,7 @@ def visualize(cfg:SteamConfigClass) -> None:
     list_preds, list_probas = [], []
     test_set =torch.tensor(emotions_encoded['test']['input_ids']).to(device)
     loader = DataLoader(test_set, batch_size=cfg.params.batch_size)
-    for batch in enumerate(loader):
+    for batch in loader:
         model_predictions = model(batch)
         y_preds = torch.argmax(model_predictions['logits'],1).to('cpu').numpy()
         y_probas = torch.nn.functional.softmax(model_predictions['logits'], dim=-1).to('cpu')[:,1].detach().numpy()
@@ -47,8 +47,6 @@ def visualize(cfg:SteamConfigClass) -> None:
     acc_score = accuracy_score(preds, test)
     plt.title('accuracy = '+ str(acc_score))
     plt.savefig(cwd+"/reports/figures/confusion_matrix.png")
-
-    
 
     RocCurveDisplay.from_predictions(
         test,
