@@ -67,14 +67,14 @@ end of the project.
 * [x] Fill out the `make_dataset.py` file such that it downloads whatever data you need and
 * [x] Add a model file and a training script and get that running
 * [x] Remember to fill out the `requirements.txt` file with whatever dependencies that you are using
-* [ ] Remember to comply with good coding practices (`pep8`) while doing the project
-* [ ] Do a bit of code typing and remember to document essential parts of your code
+* [x] Remember to comply with good coding practices (`pep8`) while doing the project
+* [x] Do a bit of code typing and remember to document essential parts of your code
 * [x] Setup version control for your data or part of your data
 * [x] Construct one or multiple docker files for your code
 * [x] Build the docker files locally and make sure they work as intended
 * [x] Write one or multiple configurations files for your experiments
 * [x] Used Hydra to load the configurations and manage your hyperparameters
-* [ ] When you have something that works somewhat, remember at some point to to some profiling and see if
+* [x] When you have something that works somewhat, remember at some point to to some profiling and see if
       you can optimize your code
 * [x] Use Weights & Biases to log training progress and other important metrics/artifacts in your code. Additionally,
       consider running a hyperparameter optimization sweep.
@@ -82,9 +82,9 @@ end of the project.
 
 ### Week 2
 
-* [ ] Write unit tests related to the data part of your code
-* [ ] Write unit tests related to model construction and or model training
-* [ ] Calculate the coverage.
+* [x] Write unit tests related to the data part of your code
+* [x] Write unit tests related to model construction and or model training
+* [x] Calculate the coverage.
 * [x] Get some continuous integration running on the github repository
 * [x] Create a data storage in GCP Bucket for you data and preferable link this with your data version control setup
 * [x] Create a trigger workflow for automatically building your docker images
@@ -139,7 +139,7 @@ end of the project.
 >
 > Answer:
 
---- question 3 fill here ---
+TODO: discuss hugging face, pytorch, etc.
 
 ## Coding environment
 
@@ -158,7 +158,7 @@ end of the project.
 >
 > Answer:
 
---- question 4 fill here ---
+TODO: discuss how pylint checks for unused dependencies
 
 ### Question 5
 
@@ -173,7 +173,7 @@ end of the project.
 > *experiments.*
 > Answer:
 
---- Using the provided Cookie cutter template we fill most of the source folders, preserving only data (cleaning up the text for sentiment analysis), models (creation, training and prediction), visualization (general model reporting, loss function etc.), tests (cloud model testing). Furthermore, the data was saved in the data folder using DVC connection with google drive, pictures and information related to model performance were saved in the reports folder, and the reference folder was filled with codes that we took inspiration from for sentiment analysis using transformers. For the docker archive, requirements and dvc have been established in the root of the repository to work with new requests and updates of new data or code. ---
+Using the provided Cookie cutter template we fill most of the source folders, preserving only data (cleaning up the text for sentiment analysis), models (creation, training and prediction), visualization (general model reporting, loss function etc.), tests (cloud model testing). Furthermore, the data was saved in the data folder using DVC connection with google drive, pictures and information related to model performance were saved in the reports folder, and the reference folder was filled with codes that we took inspiration from for sentiment analysis using transformers. For the docker archive, requirements and dvc have been established in the root of the repository to work with new requests and updates of new data or code.
 
 ### Question 6
 
@@ -184,7 +184,7 @@ end of the project.
 >
 > Answer:
 
---- question 6 fill here ---
+Pylint has been implemented in the GitHub Actions pipeline to check for many possible code and formatting issues.
 
 ## Version control
 
@@ -203,7 +203,9 @@ end of the project.
 >
 > Answer:
 
---- question 7 fill here ---
+TODO: Felipe write about tests that have been implemented
+
+These tests are automatically run when a pull request has been created, and will give feedback to the developer when they don't pass.
 
 ### Question 8
 
@@ -218,7 +220,7 @@ end of the project.
 >
 > Answer:
 
---- question 8 fill here ---
+TODO: Felipe run a code coverage command and document it here
 
 ### Question 9
 
@@ -233,7 +235,7 @@ end of the project.
 >
 > Answer:
 
---- question 9 fill here ---
+From the start the main branch has been protected, and PRs were used to merge code into main (after they were looked at by another member on the team).
 
 ### Question 10
 
@@ -248,7 +250,7 @@ end of the project.
 >
 > Answer:
 
---- question 10 fill here ---
+TODO: Alex answer this question
 
 ### Question 11
 
@@ -264,7 +266,7 @@ end of the project.
 >
 > Answer:
 
---- question 11 fill here ---
+GitHub Actions have been setup for pylint and unittests. [pylint.yml](https://github.com/javAlborz/hugging-face-on-steam/blob/kraken/.github/workflows/pylint.yml) runs pylint for all `.py` files according to the [config file](https://github.com/javAlborz/hugging-face-on-steam/blob/kraken/.pylintrc). [tests.yml](https://github.com/javAlborz/hugging-face-on-steam/blob/kraken/.github/workflows/tests.yml) runs all tests using pytest.
 
 ## Running code and tracking experiments
 
@@ -283,7 +285,9 @@ end of the project.
 >
 > Answer:
 
---- question 12 fill here ---
+Using config files and Hydra we would have the default parameters and while running a new experiment we would overwrite the config file with new parameters so that the output model would be saved in the Hydra output folder. 
+
+TODO: Felipe check this
 
 ### Question 13
 
@@ -298,7 +302,7 @@ end of the project.
 >
 > Answer:
 
---- question 13 fill here ---
+TODO: Felipe check this
 
 ### Question 14
 
@@ -315,7 +319,7 @@ end of the project.
 >
 > Answer:
 
---- question 14 fill here ---
+TODO: Felipe check this
 
 ### Question 15
 
@@ -330,7 +334,9 @@ end of the project.
 >
 > Answer:
 
---- question 15 fill here ---
+Multiple docker files have been developed, both for local use and for use in Google Cloud.
+
+TODO: Vimal write a bit more on this
 
 ### Question 16
 
