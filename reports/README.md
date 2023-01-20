@@ -115,7 +115,7 @@ end of the project.
 >
 > Answer:
 
---- 50 ---
+Group 50
 
 ### Question 2
 > **Enter the study number for each member in the group**
@@ -126,7 +126,7 @@ end of the project.
 >
 > Answer:
 
---- s202075, s212503, s212676, s212677, s222902 ---
+Students s202075, s212503, s212676, s212677, and s222902
 
 ### Question 3
 > **What framework did you choose to work with and did it help you complete the project?**
@@ -246,7 +246,7 @@ This was the output of our coverage run. Actually, the only file we had real tes
 >
 > Answer:
 
-From the start the main branch has been protected, and PRs were used to merge code into main (after they were looked at by another member on the team).
+For the development of the project we put some rules in the repository, where at first the main branch would be protected for changes in order not to affect the code developed so far. For parallel work we set up branches where we create, the docker file, model checking, and other tasks involved to solve the problem. To maintain a clear management of the repository, we connected to Git Kraken and established an internal rule to perform several commits with comments to understand what was developed. For the merge git kraken was used as well, along with tests were created after the merge to verify that everything is in order
 
 ### Question 10
 
@@ -261,7 +261,7 @@ From the start the main branch has been protected, and PRs were used to merge co
 >
 > Answer:
 
-DVC was used for versioning our data and model (large files in general). We we initialized dvc on the repository and stored the desired folders on google drive. DVC would automatically gitignore the desired folders e.g. data and models.
+We use DVC to manage the data involved in the model, where we add the model, data and other files that do not involve code to the response. Also, folders have been added to the gitignore file in order not to cause conflicts in commits and merge. DVC was very useful for the development of the project, because we could update with new data, and replicate to other computers using the rules. In general, even using GCP we kept the data archive in Google drive where it would be easier to replicate the execution of the modules and progress with the project.
 
 ### Question 11
 
@@ -277,7 +277,7 @@ DVC was used for versioning our data and model (large files in general). We we i
 >
 > Answer:
 
-GitHub Actions have been setup for pylint and unittests. [pylint.yml](https://github.com/javAlborz/hugging-face-on-steam/blob/kraken/.github/workflows/pylint.yml) runs pylint for all `.py` files according to the [config file](https://github.com/javAlborz/hugging-face-on-steam/blob/kraken/.pylintrc). [tests.yml](https://github.com/javAlborz/hugging-face-on-steam/blob/kraken/.github/workflows/tests.yml) runs all tests using pytest.
+GitHub Actions have been setup for pylint and unittests. [pylint.yml](../.github/workflows/pylint.yml) runs pylint for all `.py` files according to the [config file](../.pylintrc). This config file specifies what . [tests.yml](../.github/workflows/tests.yml) runs all tests using pytest. 
 
 ## Running code and tracking experiments
 
@@ -297,8 +297,6 @@ GitHub Actions have been setup for pylint and unittests. [pylint.yml](https://gi
 > Answer:
 
 Using config files and Hydra we would have the default parameters and while running a new experiment we would overwrite the config file with new parameters so that the output model would be saved in the Hydra output folder. Additionaly, each run could be monitored in weights and biases, with a new name attributed to it.
-
-TODO: Felipe check this
 
 ### Question 13
 
