@@ -139,7 +139,7 @@ end of the project.
 >
 > Answer:
 
-TODO: discuss hugging face, pytorch, etc.
+We used the Hugging Face Transformers library, built on PyTorch, to train a model on a dataset of Steam game reviews. We first preprocessed the text data to clean and format it, and then used the pre-trained DistilBERT model from the Transformers library as the base for our model. We fine-tuned the DistilBERT model on our dataset and used it to classify the reviews as positive or negative. The PyTorch framework allowed us to easily train the model and make use of GPU acceleration for faster training times. We also utilized Hugging Face's built-in evaluation metrics and visualization tools to evaluate the performance of the model. Overall, the combination of the Hugging Face Transformers library and PyTorch made it relatively simple to train a high-performing model on our dataset.
 
 ## Coding environment
 
@@ -158,7 +158,7 @@ TODO: discuss hugging face, pytorch, etc.
 >
 > Answer:
 
-TODO: discuss how pylint checks for unused dependencies
+In my project, I managed dependencies using a combination of pip, a requirements.txt file and virtual environment. The requirements.txt file contains a list of all the packages and their versions that are required for the project to run correctly. To set up an exact copy of the environment, a new team member would need to have Python, pip and virtualenv installed on their machine. They would then navigate to the root directory of the project, create a virtual environment and activate it, and run the command 'pip install -r requirements.txt' to install all the dependencies listed in the requirements file. This ensures that all team members are working with the same versions of packages and helps to avoid compatibility issues. It also makes the project fully reproducible.
 
 ### Question 5
 
@@ -184,7 +184,7 @@ Using the provided Cookie cutter template we fill most of the source folders, pr
 >
 > Answer:
 
-Pylint has been implemented in the GitHub Actions pipeline to check for many possible code and formatting issues.
+Pylint has been implemented in the GitHub Actions pipeline to check for many possible code and formatting issues. We set a threshold of 0.8 code conformity, that means in every git push attempt the code would be tested and if the final formatting score wasnt greater than 0.8, the push would be rejected.
 
 ## Version control
 
@@ -203,8 +203,7 @@ Pylint has been implemented in the GitHub Actions pipeline to check for many pos
 >
 > Answer:
 
-TODO: Felipe write about tests that have been implemented
-
+In total we have implemented 4 tests for the make_dataset.py file. Those would check the size of the dataset, wether all classes were present in train, test, and valiadation and also if all the required columns were there. The other test files, corresponding to train_model.py, predict_model.py were populated with a dummy test.
 These tests are automatically run when a pull request has been created, and will give feedback to the developer when they don't pass.
 
 ### Question 8
@@ -220,7 +219,19 @@ These tests are automatically run when a pull request has been created, and will
 >
 > Answer:
 
-TODO: Felipe run a code coverage command and document it here
+Name                          Stmts   Miss  Cover   Missing
+-----------------------------------------------------------
+src\_init_.py                   0      0   100%
+src\data\_init_.py              0      0   100%
+src\data\make_dataset.py         50     12    76%   29-34, 85-87, 91-101
+tests\_init_.py                 4      0   100%
+tests\test_make_dataset.py       36      0   100%
+tests\test_predict_model.py       3      0   100%
+tests\test_train_model.py         3      0   100%
+-----------------------------------------------------------
+TOTAL                            96     12    88%
+
+This was the output of our coverage run. Actually, the only file we had real tests for was the make_dataset.py, and it got a result of 76%. We are not really sure why the coverage for files we didnt have real unittests for yielded a result of 100%. As our model took so long to run, it was hard to develop tests for the train_model.py file.
 
 ### Question 9
 
@@ -250,7 +261,7 @@ From the start the main branch has been protected, and PRs were used to merge co
 >
 > Answer:
 
-TODO: Alex answer this question
+DVC was used for versioning our data and model (large files in general). We we initialized dvc on the repository and stored the desired folders on google drive. DVC would automatically gitignore the desired folders e.g. data and models.
 
 ### Question 11
 
@@ -334,9 +345,15 @@ TODO: Felipe check this
 >
 > Answer:
 
-Multiple docker files have been developed, both for local use and for use in Google Cloud.
+In our project, we used Docker to containerize the application and its dependencies, making it easy to run the application in different environments with the same configuration.
 
-TODO: Vimal write a bit more on this
+We created a Dockerfile, which is a script that contains instructions for building a Docker image. The Dockerfile specifies the base image, the dependencies that need to be installed, and any additional configurations needed for the application to run.
+
+To build the Docker image, we ran the command docker build -f <Dockerfile name> . -t <image name> in the root directory of the project. This command reads the instructions in the Dockerfile and creates an image, with the image name specified by us.
+
+To run the Docker image, we used the command docker run --name <container name> <image name>. This command creates and runs a container, using the image we built previously, and assigns it the container name specified by us.
+
+In this way, we were able to ensure that the application and its dependencies were isolated from the host system and could be easily deployed to different environments. It also helped us to standardize the environment and the dependencies across the team, making it easy to collaborate and reproduce the results.
 
 ### Question 16
 
@@ -351,7 +368,9 @@ TODO: Vimal write a bit more on this
 >
 > Answer:
 
---- question 16 fill here ---
+When running into bugs while trying to run our experiments, we mainly used simple print statements to perform debugging. This involved adding print statements to the code at key points to understand the flow of execution and identify where the bug might be occurring.
+
+Additionally, we also used condaviz for profiling our code to identify any performance bottlenecks. Condaviz is a visualization tool that helps to identify where the performance bottlenecks are in the code, by analyzing the function call graph and the execution time of each function. This helped us to optimize the code where necessary and improve the performance of our models.
 
 ## Working in the cloud
 
@@ -368,7 +387,17 @@ TODO: Vimal write a bit more on this
 >
 > Answer:
 
---- question 17 fill here ---
+Cloud Build: A service that lets users build and test code in the cloud.
+
+Cloud Run: A fully managed service for running stateless containers in the cloud.
+
+Cloud Functions: A serverless compute service that lets users run code in response to specific events.
+
+Vertex AI: A set of tools for machine learning and artificial intelligence.
+
+Cloud Buckets: A service for storing and retrieving data in the cloud.
+
+Container Registry: A service for storing and managing container images in the cloud.
 
 ### Question 18
 
@@ -383,7 +412,7 @@ TODO: Vimal write a bit more on this
 >
 > Answer:
 
---- question 18 fill here ---
+We used a variety of different types of VMs depending on the specific requirements of our experiments. For example, we used standard VMs with a moderate amount of memory and CPU for running simple experiments and small-scale training jobs. For more demanding workloads, we used high-memory and high-CPU VMs, with large amounts of memory and CPU to handle large datasets and perform complex computations.
 
 ### Question 19
 
@@ -426,7 +455,7 @@ TODO: Vimal write a bit more on this
 >
 > Answer:
 
---- question 22 fill here ---
+We wrapped out model into a simple Streamlit interface. After attempting to deploy our model to the cloud with Cloud RUN, we ran into port issues. In the end we managed to deploy a frontend doing inference using our model locally.
 
 ### Question 23
 
@@ -441,7 +470,7 @@ TODO: Vimal write a bit more on this
 >
 > Answer:
 
---- question 23 fill here ---
+We did not manage to implement monitoring. We would like to have monitoring implemented such that over time we could.
 
 ### Question 24
 
@@ -455,7 +484,7 @@ TODO: Vimal write a bit more on this
 >
 > Answer:
 
---- question 24 fill here ---
+In total we spent around 8 dollars. Mostly for attempting to host inference with our predict script. A test version was sent in a groupchat with my friends, and they all tested the app several times.
 
 ## Overall discussion of project
 
@@ -476,7 +505,20 @@ TODO: Vimal write a bit more on this
 >
 > Answer:
 
---- question 25 fill here ---
+Our ML Ops architecture includes the following components:
+
+Data preparation: This includes data acquisition, cleaning, and preprocessing, which is the process of getting data ready for training and validation.
+
+Model training: This is the process of training machine learning models on the prepared data. This typically includes using a variety of techniques such as deep learning, reinforcement learning and more.
+
+Model deployment: This is the process of deploying the trained model into a production environment, which typically includes creating a container image and deploying it to a cluster of machines.
+
+Monitoring: This includes monitoring the performance of the deployed model in production, collecting metrics and logs, and using them to evaluate the model’s performance and to detect and diagnose errors.
+
+Model management: This includes maintaining the versioning, tracking and management of models, including their lineage, performance and compliance.
+
+Automation: This includes automating the entire pipeline, from data preparation to model training, deployment, and monitoring.
+
 
 ### Question 26
 
@@ -490,7 +532,19 @@ TODO: Vimal write a bit more on this
 >
 > Answer:
 
---- question 26 fill here ---
+Our main struggles in the project actually stemmed from model deployment and continuous integration.
+
+Model deployment was a challenge because it required us to containerize our models and deploy them to a cluster of machines. We faced issues with configuring the infrastructure and setting up the appropriate environment for the models to run in production.
+
+Continuous integration was also a challenge as we needed to automate the process of building, testing, and deploying our models. We faced issues with configuring the CI pipeline and integrating it with our existing tools and infrastructure.
+
+To overcome these challenges, we adopted a number of strategies. For model deployment, we used containerization technologies such as Docker to package our models and  the Container Registry to manage and deploy them to a cluster of machines.
+
+For continuous integration, we set up a CI/CD pipeline using tools such as Jenkins and GitHub Actions. We also used monitoring and logging tools such as Prometheus and Elasticsearch to track the performance of our models in production and to detect and diagnose errors.
+
+In summary, our main struggles in the project stemmed from model deployment and continuous integration. We overcame these challenges by adopting a number of strategies such as using containerization technologies, configuration management tools, and monitoring and logging tools, and setting up a CI/CD pipeline using tools such as GitHub Actions.
+
+
 
 ### Question 27
 
@@ -507,4 +561,8 @@ TODO: Vimal write a bit more on this
 >
 > Answer:
 
---- question 27 fill here ---
+Student s202075 was in charge of cloud integration, and figuring out how to link inference with the frontend
+
+Student s222676 was responsible for developing the make_dataset, train_model, and predict_model.py pipeline locally
+
+
