@@ -115,7 +115,7 @@ end of the project.
 >
 > Answer:
 
---- question 1 fill here ---
+--- 50 ---
 
 ### Question 2
 > **Enter the study number for each member in the group**
@@ -126,7 +126,7 @@ end of the project.
 >
 > Answer:
 
---- question 2 fill here ---
+--- s202075, s212503, s212676, s212677, s222902 ---
 
 ### Question 3
 > **What framework did you choose to work with and did it help you complete the project?**
@@ -173,7 +173,7 @@ end of the project.
 > *experiments.*
 > Answer:
 
---- question 5 fill here ---
+--- Using the provided Cookie cutter template we fill most of the source folders, preserving only data (cleaning up the text for sentiment analysis), models (creation, training and prediction), visualization (general model reporting, loss function etc.), tests (cloud model testing). Furthermore, the data was saved in the data folder using DVC connection with google drive, pictures and information related to model performance were saved in the reports folder, and the reference folder was filled with codes that we took inspiration from for sentiment analysis using transformers. For the docker archive, requirements and dvc have been established in the root of the repository to work with new requests and updates of new data or code. ---
 
 ### Question 6
 
