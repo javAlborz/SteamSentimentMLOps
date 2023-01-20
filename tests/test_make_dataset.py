@@ -1,6 +1,6 @@
 import os.path
 import pytest
-from tests import _PATH_DATA
+#from tests import _PATH_DATA
 from src.data.make_dataset import ReviewDataset
 
 
@@ -11,7 +11,6 @@ def test_something_two():
 @pytest.mark.skipif(not os.path.exists("data/raw"), reason="Data files not found")
 def test_train_test_size():
     sample_size = 1000
-    
     dataset = ReviewDataset(in_folder='data/raw', out_folder='data/processed',
     name='distilbert-base-uncased', sample_size=sample_size, force=True)
     dataset = dataset.processed 
@@ -21,7 +20,6 @@ def test_train_test_size():
 @pytest.mark.skipif(not os.path.exists("data/raw"), reason="Data files not found")
 def test_dataset_columns():
     sample_size = 1000
-
     dataset = ReviewDataset(in_folder='data/raw', out_folder='data/processed',
     name='distilbert-base-uncased', sample_size=sample_size, force=True)
     dataset = dataset.processed 
@@ -32,7 +30,6 @@ def test_dataset_columns():
 @pytest.mark.skipif(not os.path.exists("data/raw"), reason="Data files not found")
 def test_n_labels():
     sample_size = 1000
-
     dataset = ReviewDataset(in_folder='data/raw', out_folder='data/processed',
     name='distilbert-base-uncased', sample_size=sample_size, force=True)
     dataset = dataset.processed 
@@ -43,10 +40,11 @@ def test_n_labels():
 @pytest.mark.skipif(not os.path.exists("data/raw"), reason="Data files not found")
 def test_all_labels_train_test():
     sample_size = 1000
-
     dataset = ReviewDataset(in_folder='data/raw', out_folder='data/processed',
     name='distilbert-base-uncased', sample_size=sample_size, force=True)
     dataset = dataset.processed 
     num_labels=2
     bool_list = [num_labels == len(set(dataset[x]['label'])) for x in ['train', 'test', 'valid']]
     assert all(bool_list)
+
+
