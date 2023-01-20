@@ -1,10 +1,7 @@
 #from transformers import AutoModelForTokenClassification
-from transformers import AutoModel, AutoConfig
+from transformers import AutoModel, AutoConfig, PreTrainedModel, PretrainedConfig
 from transformers.modeling_outputs import TokenClassifierOutput
 import torch.nn as nn
-
-
-from transformers import PreTrainedModel, PretrainedConfig
 
 
 class SteamConfig(PretrainedConfig):
