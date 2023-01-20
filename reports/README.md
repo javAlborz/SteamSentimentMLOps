@@ -219,6 +219,7 @@ These tests are automatically run when a pull request has been created, and will
 >
 > Answer:
 
+```
 Name                          Stmts   Miss  Cover   Missing
 -----------------------------------------------------------
 src\_init_.py                   0      0   100%
@@ -230,6 +231,7 @@ tests\test_predict_model.py       3      0   100%
 tests\test_train_model.py         3      0   100%
 -----------------------------------------------------------
 TOTAL                            96     12    88%
+```
 
 This was the output of our coverage run. Actually, the only file we had real tests for was the make_dataset.py, and it got a result of 76%. We are not really sure why the coverage for files we didnt have real unittests for yielded a result of 100%. As our model took so long to run, it was hard to develop tests for the train_model.py file.
 
