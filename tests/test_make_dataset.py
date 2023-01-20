@@ -3,8 +3,6 @@ import pytest
 #from tests import _PATH_DATA
 from src.data.make_dataset import ReviewDataset
 
-
-
 def test_something_two():
     assert True
 
@@ -46,6 +44,8 @@ def test_all_labels_train_test():
     num_labels=2
     bool_list = [num_labels == len(set(dataset[x]['label'])) for x in ['train', 'test', 'valid']]
     assert all(bool_list)
+
+
 
 
 
