@@ -11,7 +11,7 @@ import pandas as pd
 #import torch
 from transformers import AutoTokenizer
 from datasets import Dataset, DatasetDict, ClassLabel, load_from_disk
-#from datasets import load_dataset, Value
+#from datasets import load_dataset, Valus
 
 
 MODEL_CKPT = "bert-base-uncased"
@@ -32,22 +32,21 @@ class ReviewDataset:
                 return
             except ValueError:  # not created yet, we create instead
                 pass
-
         self.df = pd.read_csv(in_folder + '/dataset.csv',
                               usecols=['review_text', 'review_score'])
-        self.df = self.df.sample(n=sample_size)
-        # preprocessing dataset in pandas
         self.df = self.df.rename(
             columns={"review_text": "text", "review_score": "label"})
+        self.df = self.df[~self.df.text.isin(['nan'])]
+        self.df = self.df[self.df['label'].notnull()]
+        self.df = self.df[self.df.text != "Early Access Review"]
+        self.df = self.df.sample(n=sample_size)
+        # preprocessing dataset in pandas
         self.df.text = self.df.text.astype(str)
         self.df.label = self.df.label.astype(int)
-        self.df = self.df[self.df['label'].notnull()]
         self.df['text'] = self.df['text'].apply(lambda x: x.strip())
         # np.where(self.df["label"]==-1, 0, self.df["label"])
         self.df["label"] = self.df["label"].apply(
             lambda x: 'pos' if x > 0 else 'neg')
-        self.df = self.df[self.df.text != "Early Access Review"]
-        self.df = self.df[~self.df.text.isin(['nan'])]
         self.df['text'] = self.df['text'].apply(
             lambda x: re.sub(r"[♥]+", ' **** ', x))
 
@@ -66,11 +65,9 @@ class ReviewDataset:
             'train': train_testvalid['train'],
             'test': test_valid['test'],
             'valid': test_valid['train']})
-        # print(self.processed)
         # , remove_columns = ['__index_level_0__'])
         self.processed = self.processed.map(
             self.tokenize, batched=True, batch_size=None)
-        print(self.processed['train'][0])
 
         self.processed.save_to_disk(self.out_folder)
 

@@ -6,9 +6,8 @@ from hydra.core.config_store import ConfigStore
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, accuracy_score, RocCurveDisplay
 from torch.utils.data import DataLoader
 import matplotlib.pyplot as plt
-from torch import nn
 
-from transformers import AutoModel, AutoModel, AutoConfig
+from transformers import AutoModel, AutoConfig
 from src.models.model import SteamModel, SteamConfig
 from src.models.config import SteamConfigClass
 from src.data.make_dataset import ReviewDataset
@@ -31,10 +30,10 @@ def visualize(cfg:SteamConfigClass) -> None:
     list_preds, list_probas = [], []
     test_set =torch.tensor(emotions_encoded['test']['input_ids']).to(device)
     loader = DataLoader(test_set, batch_size=cfg.params.batch_size)
-    for idx, batch in enumerate(loader):
+    for batch in loader:
         model_predictions = model(batch)
         y_preds = torch.argmax(model_predictions['logits'],1).to('cpu').numpy()
-        y_probas = nn.functional.softmax(model_predictions['logits'], dim=-1).to('cpu')[:,1].detach().numpy()
+        y_probas = torch.nn.functional.softmax(model_predictions['logits'], dim=-1).to('cpu')[:,1].detach().numpy()
         list_preds.append(y_preds)
         list_probas.append(y_probas)
     preds = np.concatenate(list_preds)
@@ -48,8 +47,6 @@ def visualize(cfg:SteamConfigClass) -> None:
     acc_score = accuracy_score(preds, test)
     plt.title('accuracy = '+ str(acc_score))
     plt.savefig(cwd+"/reports/figures/confusion_matrix.png")
-
-    
 
     RocCurveDisplay.from_predictions(
         test,
