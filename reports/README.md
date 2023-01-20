@@ -115,7 +115,7 @@ end of the project.
 >
 > Answer:
 
---- 50 ---
+Group 50
 
 ### Question 2
 > **Enter the study number for each member in the group**
@@ -126,7 +126,7 @@ end of the project.
 >
 > Answer:
 
---- s202075, s212503, s212676, s212677, s222902 ---
+Students s202075, s212503, s212676, s212677, and s222902
 
 ### Question 3
 > **What framework did you choose to work with and did it help you complete the project?**
@@ -219,6 +219,7 @@ These tests are automatically run when a pull request has been created, and will
 >
 > Answer:
 
+```
 Name                          Stmts   Miss  Cover   Missing
 -----------------------------------------------------------
 src\_init_.py                   0      0   100%
@@ -230,6 +231,7 @@ tests\test_predict_model.py       3      0   100%
 tests\test_train_model.py         3      0   100%
 -----------------------------------------------------------
 TOTAL                            96     12    88%
+```
 
 This was the output of our coverage run. Actually, the only file we had real tests for was the make_dataset.py, and it got a result of 76%. We are not really sure why the coverage for files we didnt have real unittests for yielded a result of 100%. As our model took so long to run, it was hard to develop tests for the train_model.py file.
 
@@ -246,7 +248,7 @@ This was the output of our coverage run. Actually, the only file we had real tes
 >
 > Answer:
 
-From the start the main branch has been protected, and PRs were used to merge code into main (after they were looked at by another member on the team).
+For the development of the project we put some rules in the repository, where at first the main branch would be protected for changes in order not to affect the code developed so far. For parallel work we set up branches where we create, the docker file, model checking, and other tasks involved to solve the problem. To maintain a clear management of the repository, we connected to Git Kraken and established an internal rule to perform several commits with comments to understand what was developed. For the merge git kraken was used as well, along with tests were created after the merge to verify that everything is in order
 
 ### Question 10
 
@@ -261,7 +263,7 @@ From the start the main branch has been protected, and PRs were used to merge co
 >
 > Answer:
 
-DVC was used for versioning our data and model (large files in general). We we initialized dvc on the repository and stored the desired folders on google drive. DVC would automatically gitignore the desired folders e.g. data and models.
+We use DVC to manage the data involved in the model, where we add the model, data and other files that do not involve code to the response. Also, folders have been added to the gitignore file in order not to cause conflicts in commits and merge. DVC was very useful for the development of the project, because we could update with new data, and replicate to other computers using the rules. In general, even using GCP we kept the data archive in Google drive where it would be easier to replicate the execution of the modules and progress with the project.
 
 ### Question 11
 
@@ -277,7 +279,7 @@ DVC was used for versioning our data and model (large files in general). We we i
 >
 > Answer:
 
-GitHub Actions have been setup for pylint and unittests. [pylint.yml](https://github.com/javAlborz/hugging-face-on-steam/blob/kraken/.github/workflows/pylint.yml) runs pylint for all `.py` files according to the [config file](https://github.com/javAlborz/hugging-face-on-steam/blob/kraken/.pylintrc). [tests.yml](https://github.com/javAlborz/hugging-face-on-steam/blob/kraken/.github/workflows/tests.yml) runs all tests using pytest.
+GitHub Actions have been setup for pylint and unittests. [pylint.yml](../.github/workflows/pylint.yml) runs pylint for all `.py` files according to the [config file](../.pylintrc). This config file specifies what things to test for (style, typing, imports, etc.), but also more specific things such as line lengths and good variable names. If the pylint score is lower than 8.0/10.0 then the check will fail and problems will have to be fixed, when it passes a pull request can be merged. [tests.yml](../.github/workflows/tests.yml) runs all tests using pytest. 
 
 ## Running code and tracking experiments
 
@@ -298,7 +300,11 @@ GitHub Actions have been setup for pylint and unittests. [pylint.yml](https://gi
 
 Using config files and Hydra we would have the default parameters and while running a new experiment we would overwrite the config file with new parameters so that the output model would be saved in the Hydra output folder. Additionaly, each run could be monitored in weights and biases, with a new name attributed to it.
 
-TODO: Felipe check this
+Furthermore, we used argparser to determine batch and sample size. To run the model locally we used the following command:
+
+python src/models/train_model.py params.sample_size=100 params.batch_size=2
+
+Even though the model was run locally we could compare the experiments and try to understand what was happening with each run, to try to apply the same logic in the cloud.
 
 ### Question 13
 
@@ -313,7 +319,7 @@ TODO: Felipe check this
 >
 > Answer:
 
-Every time we would run a new experiment, hydra would create a new folder with the config file used for that run. That way we could keep track of each model and all the used parameters to train it
+We use config files. For every experiment, hydra created a new folder with the settings of that run, so it was possible to check the hyperparameters for that experiment. With this alternative it was possible to simplify the iteration and improvement process for the training and thus try to extract the maximum from the provided model. 
 
 ### Question 14
 
@@ -330,7 +336,7 @@ Every time we would run a new experiment, hydra would create a new folder with t
 >
 > Answer:
 
-TODO: Felipe check this
+See the wandb screenshot in [figure](figures/hugging_wandb.jpeg).
 
 ### Question 15
 
@@ -421,7 +427,7 @@ We used a variety of different types of VMs depending on the specific requiremen
 >
 > Answer:
 
---- question 19 fill here ---
+GCP bucket can be seen in [figure](figures/hugging_bucket.jpeg) and [figure](figures/hugging_bucket2.jpeg).
 
 ### Question 20
 
@@ -430,7 +436,7 @@ We used a variety of different types of VMs depending on the specific requiremen
 >
 > Answer:
 
---- question 20 fill here ---
+GCP container registry can be seen in [this figure](figures/hugging_registry.jpeg).
 
 ### Question 21
 
@@ -439,7 +445,7 @@ We used a variety of different types of VMs depending on the specific requiremen
 >
 > Answer:
 
---- question 21 fill here ---
+Cloud build history can be seen in [this figure](figures/hugging_build.jpeg) (this is only from one account, some other builds were made on other GCloud accounts).
 
 ### Question 22
 
@@ -455,7 +461,7 @@ We used a variety of different types of VMs depending on the specific requiremen
 >
 > Answer:
 
-We wrapped out model into a simple Streamlit interface. After attempting to deploy our model to the cloud with Cloud RUN, we ran into port issues. In the end we managed to deploy a frontend doing inference using our model locally.
+We wrapped out model into a simple Streamlit interface. After attempting to deploy our model to the cloud with Cloud RUN, we ran into port issues. In the end we managed to deploy a frontend doing inference using our model locally. Some screenshots of these are [figure](figures/hugging_cloud_run.png) and [figure](figures/hugging_vertex.png).
 
 ### Question 23
 
@@ -484,7 +490,7 @@ We did not manage to implement monitoring. We would like to have monitoring impl
 >
 > Answer:
 
-In total we spent around 8 dollars. Mostly for attempting to host inference with our predict script. A test version was sent in a groupchat with my friends, and they all tested the app several times.
+In total we spent around 8 dollars. Mostly for attempting to host inference with our predict script. A test version was sent in a groupchat with my friends, and they all tested the app several times. Some other credits were spent on prototyping and experimetation, in order to see what components worked best.
 
 ## Overall discussion of project
 
@@ -565,4 +571,4 @@ Student s202075 was in charge of cloud integration, and figuring out how to link
 
 Student s222676 was responsible for developing the make_dataset, train_model, and predict_model.py pipeline locally
 
-
+Student s222902 was responsible for CI/CD pipelines (linting and testing), GCloud deployment, and general code improvements.
