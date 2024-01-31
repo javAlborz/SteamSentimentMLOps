@@ -1,7 +1,3 @@
----
-layout: default
-nav_exclude: true
----
 
 # Project Description
 
@@ -12,64 +8,9 @@ Naturally, all components of the course should be implemented in the project (pi
 Applications of such a model and infrastructure include predicting review scores, building more advanced recommender systems based on what users find important, and assisting developers in predicting what users value in their games.
 
 
-### Week 1
-
-* [x] Create a git repository
-* [x] Make sure that all team members have write access to the github repository
-* [x] Create a dedicated environment for you project to keep track of your packages
-* [x] Create the initial file structure using cookiecutter
-* [x] Fill out the `make_dataset.py` file such that it downloads whatever data you need and
-* [x] Add a model file and a training script and get that running
-* [x] Remember to fill out the `requirements.txt` file with whatever dependencies that you are using
-* [x] Remember to comply with good coding practices (`pep8`) while doing the project
-* [x] Do a bit of code typing and remember to document essential parts of your code
-* [x] Setup version control for your data or part of your data
-* [x] Construct one or multiple docker files for your code
-* [x] Build the docker files locally and make sure they work as intended
-* [x] Write one or multiple configurations files for your experiments
-* [x] Used Hydra to load the configurations and manage your hyperparameters
-* [x] When you have something that works somewhat, remember at some point to to some profiling and see if
-      you can optimize your code
-* [x] Use Weights & Biases to log training progress and other important metrics/artifacts in your code. Additionally,
-      consider running a hyperparameter optimization sweep.
-* [ ] Use Pytorch-lightning (if applicable) to reduce the amount of boilerplate in your code
-
-### Week 2
-
-* [x] Write unit tests related to the data part of your code
-* [x] Write unit tests related to model construction and or model training
-* [x] Calculate the coverage.
-* [x] Get some continuous integration running on the github repository
-* [x] Create a data storage in GCP Bucket for you data and preferable link this with your data version control setup
-* [x] Create a trigger workflow for automatically building your docker images
-* [x] Get your model training in GCP using either the Engine or Vertex AI
-* [x] Create a FastAPI application that can do inference using your model
-* [ ] If applicable, consider deploying the model locally using torchserve
-* [ ] Deploy your model in GCP using either Functions or Run as the backend
-
-### Week 3
-
-* [ ] Check how robust your model is towards data drifting
-* [ ] Setup monitoring for the system telemetry of your deployed model
-* [ ] Setup monitoring for the performance of your deployed model
-* [ ] If applicable, play around with distributed data loading
-* [ ] If applicable, play around with distributed model training
-* [ ] Play around with quantization, compilation and pruning for you trained models to increase inference speed
-
-### Additional
-
-* [ ] Revisit your initial project description. Did the project turn out as you wanted?
-* [ ] Make sure all group members have a understanding about all parts of the project
-* [ ] Uploaded all your code to github
-
-## Group information
-
-
 We used the Hugging Face Transformers library, built on PyTorch, to train a model on a dataset of Steam game reviews. We first preprocessed the text data to clean and format it, and then used the pre-trained DistilBERT model from the Transformers library as the base for our model. We fine-tuned the DistilBERT model on our dataset and used it to classify the reviews as positive or negative. The PyTorch framework allowed us to easily train the model and make use of GPU acceleration for faster training times. We also utilized Hugging Face's built-in evaluation metrics and visualization tools to evaluate the performance of the model. Overall, the combination of the Hugging Face Transformers library and PyTorch made it relatively simple to train a high-performing model on our dataset.
 
 ## Coding environment
-
-> In the following section we are interested in learning more about you local development environment.
 
 In our project, we managed dependencies using a combination of pip, a requirements.txt file and virtual environment. The requirements.txt file contains a list of all the packages and their versions that are required for the project to run correctly. To set up an exact copy of the environment, a new team member would need to have Python, pip and virtualenv installed on their machine. They would then navigate to the root directory of the project, create a virtual environment and activate it, and run the command 'pip install -r requirements.txt' to install all the dependencies listed in the requirements file. This ensures that all team members are working with the same versions of packages and helps to avoid compatibility issues. It also makes the project fully reproducible.
 
@@ -118,7 +59,7 @@ python src/models/train_model.py params.sample_size=100 params.batch_size=2
 We use config files. For every experiment, hydra created a new folder with the settings of that run, so it was possible to check the hyperparameters for that experiment. With this alternative it was possible to simplify the iteration and improvement process for the training and thus try to extract the maximum from the provided model. 
 
 
-See the wandb screenshot in [figure](reports/figures/hugging_wandb.jpeg). As seen in the Wandb page of our experiments we performed several runs to verify the performance of the model for sentiment analysis, we could verify the time used to execute the functions to try the processing, loss of information, f1 score generated by the text and the amount of samples per second. In general, even though it was simple, we had a good overview of how our model was running and what was necessary to improve it. We believe that we could improve the quality of the management of the experiments, using clear tags for each run to understand what were the changes caused in the training and thus not need to check the config files in each run. The importance of metrics in the evaluation of the model is essential to determine the success of its release, without checking the loss, f1 score (in case of NLP) and even processing time, it is not possible to identify bottlenecks in the processing or accuracy of it, causing the release of a bad product to the public. Another challenge we had was trying to run all the experiments with the correct amount of steps and training, due to the failure to run the model in the cloud and only locally, we had many experiments that were not very "valuable" for comparison, thus creating some noise in the overall analysis
+See the wandb screenshot in ![Wandb Screenshot](reports/figures/hugging_wandb.jpeg). As seen in the Wandb page of our experiments we performed several runs to verify the performance of the model for sentiment analysis, we could verify the time used to execute the functions to try the processing, loss of information, f1 score generated by the text and the amount of samples per second. In general, even though it was simple, we had a good overview of how our model was running and what was necessary to improve it. We believe that we could improve the quality of the management of the experiments, using clear tags for each run to understand what were the changes caused in the training and thus not need to check the config files in each run. The importance of metrics in the evaluation of the model is essential to determine the success of its release, without checking the loss, f1 score (in case of NLP) and even processing time, it is not possible to identify bottlenecks in the processing or accuracy of it, causing the release of a bad product to the public. Another challenge we had was trying to run all the experiments with the correct amount of steps and training, due to the failure to run the model in the cloud and only locally, we had many experiments that were not very "valuable" for comparison, thus creating some noise in the overall analysis
 
 
 In our project, we used Docker to containerize the application and its dependencies, making it easy to run the application in different environments with the same configuration.
@@ -159,7 +100,14 @@ GCP container registry can be seen in [this figure](reports/figures/hugging_regi
 Cloud build history can be seen in [this figure](reports/figures/hugging_build.jpeg) (this is only from one account, some other builds were made on other GCloud accounts).
 
 
-We wrapped out model into a simple Streamlit interface. After attempting to deploy our model to the cloud with Cloud RUN, we ran into port issues. In the end we managed to deploy a frontend doing inference using our model locally. Some screenshots of these are [figure](reports/figures/hugging_cloud_run.png) and [figure](reports/figures/hugging_vertex.png).
+We wrapped out model into a simple Streamlit interface.
+<table>
+  <tr>
+    <td><img src="reports/figures/hugging_cloud_run.png" alt="Hugging Cloud Run"></td>
+    <td><img src="reports/figures/hugging_vertex.png" alt="Hugging Vertex"></td>
+  </tr>
+</table>
+
 
 Unfortunately we have not applied model monitoring, this step would be essential to set up alert systems to warn us about potential risks to the model, which we would like to monitor the credits in the GCP, or the runtime for model retraining. While being objective, this function would help a lot in the overall product maintenance and could provide insights on optimization being cost or processing.
 
