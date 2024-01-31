@@ -101,13 +101,6 @@ Cloud build history can be seen in [this figure](reports/figures/hugging_build.j
 
 
 We wrapped out model into a simple Streamlit interface.
-<table>
-  <tr>
-    <td><img src="reports/figures/hugging_cloud_run.png" alt="Hugging Cloud Run"></td>
-    <td><img src="reports/figures/hugging_vertex.png" alt="Hugging Vertex"></td>
-  </tr>
-</table>
-
 
 Unfortunately we have not applied model monitoring, this step would be essential to set up alert systems to warn us about potential risks to the model, which we would like to monitor the credits in the GCP, or the runtime for model retraining. While being objective, this function would help a lot in the overall product maintenance and could provide insights on optimization being cost or processing.
 
